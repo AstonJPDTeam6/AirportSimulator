@@ -1,4 +1,7 @@
-package aston.JPDTeam6.AirportSimulator;
+package aston.JPDTeam6.AirportSimulator.Model;
+
+import aston.JPDTeam5.SimulatorLibrary.Model.Simulator;
+import aston.JPDTeam5.SimulatorLibrary.View.View;
 
 public class AirportSimulator extends Simulator {
 

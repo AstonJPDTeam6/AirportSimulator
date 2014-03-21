@@ -1,4 +1,4 @@
-package aston.JPDTeam6.AirportSimulator;
+package aston.JPDTeam5.SimulatorLibrary.Model;
 
 public abstract class Actor {
 

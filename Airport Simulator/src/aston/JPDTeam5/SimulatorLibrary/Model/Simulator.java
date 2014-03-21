@@ -1,12 +1,15 @@
-package aston.JPDTeam6.AirportSimulator;
+package aston.JPDTeam5.SimulatorLibrary.Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import aston.JPDTeam5.SimulatorLibrary.View.View;
 
 public abstract class Simulator {
 
 	private View view;
-	//private boolean runSimulation = false;
+	private Random rng;
 	
 	protected long currentTick;
 	
@@ -14,6 +17,8 @@ public abstract class Simulator {
 	
 	public Simulator(View view) {
 		this.view = view;
+		
+		rng = new Random(1000); //TODO: make the seed configurable
 		
 		resetSimulation();
 	}
@@ -60,6 +65,11 @@ public abstract class Simulator {
 		}
 		
 		return true;
+	}
+	
+	public Random getRandom()
+	{
+		return rng;
 	}
 	
 }

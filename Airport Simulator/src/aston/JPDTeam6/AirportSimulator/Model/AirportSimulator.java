@@ -19,4 +19,16 @@ public class AirportSimulator extends Simulator {
 		airport = new Airport(this);
 	}
 
+	public boolean doTick()
+	{
+		super.doTick();
+		
+		return getTick() < 2880; //Maximum number of ticks to stop
+	}
+	
+	private void spawnPlanes()
+	{
+		
+	}
+	
 }

@@ -6,7 +6,9 @@ public abstract class Actor {
 	
 	public Actor(Simulator simulator) {
 		this.simulator = simulator;
+		this.simulator.actors.add(this);
 	}
+	
 	
 	protected Simulator getSimulator()
 	{

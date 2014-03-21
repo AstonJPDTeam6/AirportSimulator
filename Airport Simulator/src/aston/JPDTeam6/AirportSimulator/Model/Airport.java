@@ -134,7 +134,7 @@ public class Airport extends Actor {
 			
 			if(currentPlane.equals(plane))
 			{
-				currentPlane = null;
+//				currentPlane
 			}
 		}
 	}

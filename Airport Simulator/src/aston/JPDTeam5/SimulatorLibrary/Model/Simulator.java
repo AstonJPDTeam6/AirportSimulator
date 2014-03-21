@@ -45,16 +45,14 @@ public abstract class Simulator {
 		{
 			view.update(this);
 		}
-		while(onTick());
+		while(doTick());
 		
 		view.update(this);
 		
 	}
 	
-	public boolean onTick()
-	{
-		currentTick++;
-		
+	public boolean doTick()
+	{		
 		for(Actor actor : actors)
 		{
 			// If any onTicks return false, end the simulation
@@ -64,12 +62,22 @@ public abstract class Simulator {
 			}
 		}
 		
+		currentTick++;
 		return true;
 	}
 	
 	public Random getRandom()
 	{
 		return rng;
+	}
+	
+	public void addActor(Actor actor)
+	{
+		actors.add(actor);
+	}
+	public void deleteActor(Actor actor)
+	{
+		actors.remove(actor);
 	}
 	
 }

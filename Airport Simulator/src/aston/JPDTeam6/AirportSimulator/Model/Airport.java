@@ -4,13 +4,14 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 
-import aston.JPDTeam5.SimulatorLibrary.Model.Actor;
-import aston.JPDTeam5.SimulatorLibrary.Model.Simulator;
+import aston.JPDTeam6.AirportSimulator.Model.Planes.Plane;
+import aston.JPDTeam6.SimulatorLibrary.Model.Actor;
+import aston.JPDTeam6.SimulatorLibrary.Model.Simulator;
 
 public class Airport extends Actor {
 
-	private Queue<Plane> takeOffQueue = new ArrayDeque<Plane>();
-	private Queue<Plane> landingQueue = new ArrayDeque<Plane>();
+	public Queue<Plane> takeOffQueue = new ArrayDeque<Plane>();
+	public Queue<Plane> landingQueue = new ArrayDeque<Plane>();
 	
 	private char airportState = '\0'; //t=takeoff, l=landing, other=nothing
 	private Plane currentPlane = null;

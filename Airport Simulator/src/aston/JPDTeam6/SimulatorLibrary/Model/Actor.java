@@ -1,4 +1,4 @@
-package aston.JPDTeam5.SimulatorLibrary.Model;
+package aston.JPDTeam6.SimulatorLibrary.Model;
 
 public abstract class Actor {
 
@@ -6,9 +6,13 @@ public abstract class Actor {
 	
 	public Actor(Simulator simulator) {
 		this.simulator = simulator;
-		this.simulator.actors.add(this);
+		this.simulator.addActor(this);
 	}
 	
+	public void delete()
+	{
+		this.simulator.deleteActor(this);
+	}
 	
 	protected Simulator getSimulator()
 	{

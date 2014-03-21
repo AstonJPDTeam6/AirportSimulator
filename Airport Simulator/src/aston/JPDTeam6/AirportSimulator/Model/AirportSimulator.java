@@ -1,12 +1,15 @@
 package aston.JPDTeam6.AirportSimulator.Model;
 
-import aston.JPDTeam5.SimulatorLibrary.Model.Simulator;
-import aston.JPDTeam5.SimulatorLibrary.View.View;
+import java.util.ArrayList;
+
+import aston.JPDTeam6.SimulatorLibrary.Model.Actor;
+import aston.JPDTeam6.SimulatorLibrary.Model.Simulator;
+import aston.JPDTeam6.SimulatorLibrary.View.View;
 
 public class AirportSimulator extends Simulator {
 
 	private float commercialProbability;
-	private Airport airport;
+	public Airport airport;
 	
 	public AirportSimulator(View view, float commercialProbability) {
 		super(view);
@@ -29,6 +32,38 @@ public class AirportSimulator extends Simulator {
 	private void spawnPlanes()
 	{
 		
+	}
+	
+	public void deleteActor(Actor actor)
+	{
+		ArrayList<Actor> toDelete = new ArrayList<Actor>();
+		for(Actor a : airport.takeOffQueue)
+		{
+			if(actor.equals(a))
+			{
+				toDelete.add(a);
+			}
+		}
+		
+		for(Actor a : toDelete) {
+			airport.takeOffQueue.remove(a);
+		}
+		toDelete.clear();
+
+
+		for(Actor a : airport.landingQueue)
+		{
+			if(actor.equals(a))
+			{
+				toDelete.add(a);
+			}
+		}
+		
+		for(Actor a : toDelete) {
+			airport.landingQueue.remove(a);
+		}
+		
+		super.deleteActor(actor);
 	}
 	
 }

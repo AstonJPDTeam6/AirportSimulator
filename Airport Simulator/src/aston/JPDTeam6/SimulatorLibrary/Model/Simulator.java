@@ -1,10 +1,10 @@
-package aston.JPDTeam5.SimulatorLibrary.Model;
+package aston.JPDTeam6.SimulatorLibrary.Model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import aston.JPDTeam5.SimulatorLibrary.View.View;
+import aston.JPDTeam6.SimulatorLibrary.View.View;
 
 public abstract class Simulator {
 

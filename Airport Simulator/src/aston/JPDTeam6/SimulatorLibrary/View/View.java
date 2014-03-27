@@ -5,3 +5,5 @@ import aston.JPDTeam6.SimulatorLibrary.Model.Simulator;
 public interface View {
 	void update(Simulator simulator);
 }
+
+//this is a comment test - Simon

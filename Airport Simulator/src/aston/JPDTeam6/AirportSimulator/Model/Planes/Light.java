@@ -1,39 +1,43 @@
 package aston.JPDTeam6.AirportSimulator.Model.Planes;
 
-import aston.JPDTeam6.AirportSimulator.Model.AirportSimulator;
+import aston.JPDTeam6.AirportSimulator.AirportSimulator;
 
 public class Light extends Plane {
 
+    private static final long TAKEOFF_TICKS = 4;
+    private static final long LANDING_TICKS = 6;
+    private static final float SPAWN_PROBABILITY = 0.005f;
+    
+	public Glider towedGlider = null;
+	
 	public Light(AirportSimulator simulator)
 	{
-		super(simulator, 1, 1, 1); //TODO Put proper variables here
+		super(simulator, LANDING_TICKS, TAKEOFF_TICKS, 0);
+		this.maxFlyingTime = 20 + simulator.getRandom().nextInt(20);
 	}
 
-	public Light(AirportSimulator simulator, Plane plane)
+	public Light(AirportSimulator simulator, Glider glider)
 	{
 		this(simulator);
+		
+		towedGlider = glider;
 	}
 	
 	@Override
 	public void onTakenOff() {
-		((AirportSimulator)getSimulator()).airport.queueLanding(this);
-	}
-
-	@Override
-	public void onLanded() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onCrash() {
-		// TODO Auto-generated method stub
-
+		if(towedGlider != null)
+		{
+			((AirportSimulator)getSimulator()).airport.queueLanding(this);
+		}
+		else
+		{
+			super.onTakenOff();
+		}
 	}
 	
 	public static float getSpawnProbability()
 	{
-		return 1f;
+		return SPAWN_PROBABILITY;
 	}
 
 }

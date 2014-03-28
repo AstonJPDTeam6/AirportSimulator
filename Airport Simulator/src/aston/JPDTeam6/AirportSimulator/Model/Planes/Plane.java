@@ -1,8 +1,8 @@
 package aston.JPDTeam6.AirportSimulator.Model.Planes;
 
-import aston.JPDTeam6.AirportSimulator.Model.AirportSimulator;
+import aston.JPDTeam6.AirportSimulator.AirportSimulator;
+import aston.JPDTeam6.SimulatorLibrary.Simulator;
 import aston.JPDTeam6.SimulatorLibrary.Model.Actor;
-import aston.JPDTeam6.SimulatorLibrary.Model.Simulator;
 
 public abstract class Plane extends Actor {
 
@@ -26,7 +26,7 @@ public abstract class Plane extends Actor {
 	@Override
 	public boolean onTick()
 	{
-		return true;
+		return canFly();
 	}
 	
 	public long getTimeToLand()

@@ -1,22 +1,25 @@
-package aston.JPDTeam6.SimulatorLibrary.Model;
+package aston.JPDTeam6.SimulatorLibrary;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import aston.JPDTeam6.SimulatorLibrary.Model.Actor;
 import aston.JPDTeam6.SimulatorLibrary.View.View;
 
 public abstract class Simulator {
 
-	private View view;
+	private View[] views;
 	private Random rng;
+	private Configuration configuration;
 	
 	protected long currentTick;
 	
 	public List<Actor> actors;
 	
-	public Simulator(View view) {
-		this.view = view;
+	public Simulator(Configuration configuration, View[] views) {
+		this.views = views;
+		this.configuration = configuration;
 		
 		rng = new Random(1000); //TODO: make the seed configurable
 		
@@ -43,23 +46,38 @@ public abstract class Simulator {
 		
 		do
 		{
-			view.update(this);
+			updateViews();
 		}
 		while(doTick());
 		
-		view.update(this);
+		updateViews();
 		
 	}
 	
+	private void updateViews()
+	{
+	    for(View view : views)
+	    {
+	        view.update(this);
+	    }
+	}
+	
 	public boolean doTick()
-	{		
+	{
+	    ArrayList<Actor> actorsToDelete = new ArrayList<Actor>();
+	    
 		for(Actor actor : actors)
 		{
 			// If any onTicks return false, end the simulation
 			if(!actor.onTick())
 			{
-				return false;
+				actors.add(actor);
 			}
+		}
+		
+		for(Actor actor : actorsToDelete)
+		{
+		    actor.delete();
 		}
 		
 		currentTick++;
@@ -69,6 +87,11 @@ public abstract class Simulator {
 	public Random getRandom()
 	{
 		return rng;
+	}
+	
+	public Configuration getConfiguration()
+	{
+	    return configuration;
 	}
 	
 	public void addActor(Actor actor)

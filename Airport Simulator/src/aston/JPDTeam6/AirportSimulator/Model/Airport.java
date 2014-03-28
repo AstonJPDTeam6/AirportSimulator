@@ -4,37 +4,45 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 
+import aston.JPDTeam6.AirportSimulator.Model.AirTrafficControllers.AirTrafficController;
 import aston.JPDTeam6.AirportSimulator.Model.Planes.Plane;
+import aston.JPDTeam6.SimulatorLibrary.Simulator;
 import aston.JPDTeam6.SimulatorLibrary.Model.Actor;
-import aston.JPDTeam6.SimulatorLibrary.Model.Simulator;
 
 public class Airport extends Actor {
 
 	public Queue<Plane> takeOffQueue = new ArrayDeque<Plane>();
 	public Queue<Plane> landingQueue = new ArrayDeque<Plane>();
 	
-	private char airportState = '\0'; //t=takeoff, l=landing, other=nothing
-	private Plane currentPlane = null;
+	private AirTrafficController airTrafficController;
+	private AirportEvent currentAirportEvent;
 	
 	public Airport(Simulator simulator)
 	{
 		super(simulator);
+		
+		//TODO possibly create this elsewhere?
+		airTrafficController = new aston.JPDTeam6.AirportSimulator.Model.AirTrafficControllers.FIFO(this);
 	}
 
 	@Override
 	public boolean onTick()
 	{
-		checkCrashedPlanes();
+//		checkCrashedPlanes();
 		
-		if((airportState != 't' && airportState != 'l') || currentPlane == null)
+		if(currentAirportEvent == null || currentAirportEvent.getAirportState() == AirportState.WAITING)
 		{
-			scheduleNextTakeOffLanding();
+		    scheduleNextEvent();
 		}
-		else if(airportState == 't')
+		
+//		Plane currentPlane = currentAirportEvent.getCurrentPlane();
+		AirportState airportState = currentAirportEvent.getAirportState();
+		
+		if(airportState == AirportState.TAKEOFF)
 		{
 			handleTakeOffTick();
 		}
-		else if(airportState == 'l')
+		else if(airportState == AirportState.LANDING)
 		{
 			handleLandingTick();
 		}
@@ -52,92 +60,52 @@ public class Airport extends Actor {
 		landingQueue.add(plane);
 	}
 	
-	private Plane getNextTakingOff()
+	private void scheduleNextEvent()
 	{
-		return takeOffQueue.poll();
-	}
-	
-	private Plane getNextLanding()
-	{
-		return landingQueue.poll();
-	}
-	
-	private void scheduleNextTakeOffLanding()
-	{
-		//Randomly pick whether a plane should be scheduled to take off or land
-		boolean nextTakeOff = getSimulator().getRandom().nextBoolean();
-		
-		if(nextTakeOff)
-		{
-			currentPlane = getNextTakingOff();
-		}
-		else
-		{
-			currentPlane = getNextLanding();
-		}
-		
-		if(currentPlane == null)
-		{
-			airportState = '\0';
-			currentPlane.planeEventTick = 0;
-		}
-		else
-		{
-			airportState = nextTakeOff ? 't' : 'l';
-			currentPlane.planeEventTick = getSimulator().getTick();
-			
-			if(nextTakeOff)
-			{
-				currentPlane.startTakeOff();
-				handleTakeOffTick();
-			}
-			else
-			{
-				currentPlane.startLanding();
-				handleLandingTick();
-			}
-		}
-		
+	    currentAirportEvent = airTrafficController.getNextEvent();
 	}
 	
 	private void handleTakeOffTick()
 	{
+	    Plane currentPlane = currentAirportEvent.getCurrentPlane();
 		if(currentPlane.hasTakenOff())
 		{
 			currentPlane.onTakenOff();
+			scheduleNextEvent();
 		}
 	}
 	
 	private void handleLandingTick()
 	{
+	    Plane currentPlane = currentAirportEvent.getCurrentPlane();
 		if(currentPlane.hasLanded())
 		{
 			currentPlane.onLanded();
+			scheduleNextEvent();
 		}
 	}
 	
-	private void checkCrashedPlanes()
-	{
-		ArrayList<Plane> planesToRemove = new ArrayList<Plane>();
-		for(Plane plane : landingQueue)
-		{
-			if(!plane.canFly())
-			{
-				plane.onCrash();
-				planesToRemove.add(plane);
-			}
-		}
-		
-		//Remove crashed planes
-		for(Plane plane : planesToRemove)
-		{
-			landingQueue.remove(plane);
-			
-			if(currentPlane.equals(plane))
-			{
-//				currentPlane
-			}
-		}
-	}
+	/**
+	 * TODO: This could possibly be handled from within the plane classes 
+	 */
+//	private void checkCrashedPlanes()
+//	{
+//		ArrayList<Plane> planesToRemove = new ArrayList<Plane>();
+//		for(Plane plane : landingQueue)
+//		{
+//			if(!plane.canFly())
+//			{
+//				plane.onCrash();
+//				planesToRemove.add(plane);
+//			}
+//		}
+//		
+//		//Remove crashed planes
+//		for(Plane plane : planesToRemove)
+//		{
+//			plane.delete();
+//		}
+//	}
 	
 }
+

@@ -6,6 +6,10 @@ import aston.JPDTeam6.SimulatorLibrary.Model.Actor;
 
 public abstract class Plane extends Actor {
 
+    private boolean hasTakenOff = false;
+    private boolean hasLanded   = false;
+    private boolean hasCrashed  = false;
+    
 	protected long spawnTick;
 	
 	protected long timeToLand;
@@ -72,20 +76,20 @@ public abstract class Plane extends Actor {
 	
 	public boolean canFly()
 	{
-		return getFlyingTimeLeft() > 0;
+		return (getFlyingTimeLeft() > 0 || !hasLanded || !hasTakenOff || !hasCrashed);
 	}
 	
 	public void onTakenOff()
 	{
-		//do stuff to delete self
+		hasTakenOff = true;
 	}
 	public void onLanded()
 	{
-		//do stuff to delete self
+	    hasLanded = true;
 	}
 	public void onCrash()
 	{
-		//do stuff to delete self
+	    hasCrashed = true;
 	}
 	
 }

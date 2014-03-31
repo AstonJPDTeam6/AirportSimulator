@@ -12,6 +12,7 @@ public abstract class Simulator {
 	private View[] views;
 	private Random rng;
 	private Configuration configuration;
+	private Counter counter = new Counter();
 	
 	protected long currentTick;
 	
@@ -54,8 +55,7 @@ public abstract class Simulator {
 		}
 		while(doTick());
 		
-		updateViews();
-		
+		endViews();
 	}
 	
 	private void updateViews()
@@ -63,6 +63,14 @@ public abstract class Simulator {
 	    for(View view : views)
 	    {
 	        view.update(this);
+	    }
+	}
+	
+	private void endViews()
+	{
+	    for(View view : views)
+	    {
+	        view.end(this);
 	    }
 	}
 	
@@ -76,7 +84,7 @@ public abstract class Simulator {
 			// If any onTicks return false, end the simulation
 			if(!actor.onTick())
 			{
-				actorsToAdd.add(actor);
+				addActor(actor);
 			}
 		}
 		
@@ -98,6 +106,11 @@ public abstract class Simulator {
 	public Configuration getConfiguration()
 	{
 	    return configuration;
+	}
+	
+	public Counter getCounter()
+	{
+	    return counter;
 	}
 	
 	public void addActor(Actor actor)

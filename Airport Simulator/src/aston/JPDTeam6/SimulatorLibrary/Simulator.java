@@ -12,6 +12,7 @@ public abstract class Simulator {
 	private View[] views;
 	private Random rng;
 	private Configuration configuration;
+	private Counter counter = new Counter();
 
 	protected long currentTick;
 
@@ -54,36 +55,43 @@ public abstract class Simulator {
 		}
 		while(doTick());
 
-		updateViews();
-
+		endViews();
 	}
 
 	private void updateViews()
 	{
-		for(View view : views)
-		{
-			view.update(this);
-		}
+	    for(View view : views)
+	    {
+	        view.update(this);
+	    }
 	}
 
+	private void endViews()
+	{
+	    for(View view : views)
+	    {
+	        view.end(this);
+	    }
+	}
+	
 	public boolean doTick()
 	{
-		addWaitingActors();
-		ArrayList<Actor> actorsToDelete = new ArrayList<Actor>();
-
+	    addWaitingActors();
+	    ArrayList<Actor> actorsToDelete = new ArrayList<Actor>();
+	    
 		for(Actor actor : actors)
 		{
 			// If any onTicks return false, end the simulation
 			if(!actor.onTick())
 			{
-				actorsToAdd.add(actor);
+				addActor(actor);
 			}
 		}
 
 		for(Actor actor : actorsToDelete)
 		{
-			//		    actor.delete();
-			deleteActor(actor);
+//		    actor.delete();
+		    deleteActor(actor);
 		}
 
 		currentTick++;
@@ -97,9 +105,14 @@ public abstract class Simulator {
 
 	public Configuration getConfiguration()
 	{
-		return configuration;
+	    return configuration;
 	}
 
+	public Counter getCounter()
+	{
+	    return counter;
+	}
+	
 	public void addActor(Actor actor)
 	{
 		actorsToAdd.add(actor);
@@ -111,7 +124,7 @@ public abstract class Simulator {
 
 	private void addWaitingActors()
 	{
-		actors.addAll(actorsToAdd);
-		actorsToAdd.clear();
+	    actors.addAll(actorsToAdd);
+	    actorsToAdd.clear();
 	}
 }

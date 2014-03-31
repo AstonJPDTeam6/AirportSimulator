@@ -89,4 +89,9 @@ public class AirportSimulatorTable extends GUIview {
 		model.addRow(new Object[]{(simulator.getTick()), "...", "1v1 me"});
 	}
 
+	
+	public void end(Simulator simulator)
+	{
+		
+	}
 }

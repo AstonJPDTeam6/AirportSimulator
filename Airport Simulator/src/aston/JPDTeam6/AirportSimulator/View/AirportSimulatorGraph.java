@@ -187,4 +187,9 @@ public class AirportSimulatorGraph extends GUIview {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.addRow(new Object[]{(simulator.getTick()), "...", "1v1 me"});
 	}
+	
+	public void end(Simulator simulator)
+	{
+		
+	}
 }

@@ -12,18 +12,18 @@ public abstract class Simulator {
 	private View[] views;
 	private Random rng;
 	private Configuration configuration;
-	
+
 	protected long currentTick;
-	
+
 	public List<Actor> actors;
 	private ArrayList<Actor> actorsToAdd = new ArrayList<Actor>();
-	
+
 	public Simulator(Configuration configuration, View[] views) {
 		this.views = views;
 		this.configuration = configuration;
-		
+
 		rng = new Random(1000); //TODO: make the seed configurable
-		
+
 		resetSimulation();
 	}
 
@@ -31,7 +31,7 @@ public abstract class Simulator {
 	{
 		return currentTick;
 	}
-	
+
 	/**
 	 * Don't actually use this to reset the simulation!
 	 */
@@ -40,37 +40,37 @@ public abstract class Simulator {
 		currentTick = 0;
 		actors = new ArrayList<Actor>();
 	}
-	
+
 	/**
 	 * Automatically runs the simulation
 	 */
 	public void runSimulation()
 	{
 		resetSimulation();
-		
+
 		do
 		{
 			updateViews();
 		}
 		while(doTick());
-		
+
 		updateViews();
-		
+
 	}
-	
+
 	private void updateViews()
 	{
-	    for(View view : views)
-	    {
-	        view.update(this);
-	    }
+		for(View view : views)
+		{
+			view.update(this);
+		}
 	}
-	
+
 	public boolean doTick()
 	{
-	    addWaitingActors();
-	    ArrayList<Actor> actorsToDelete = new ArrayList<Actor>();
-	    
+		addWaitingActors();
+		ArrayList<Actor> actorsToDelete = new ArrayList<Actor>();
+
 		for(Actor actor : actors)
 		{
 			// If any onTicks return false, end the simulation
@@ -79,27 +79,27 @@ public abstract class Simulator {
 				actorsToAdd.add(actor);
 			}
 		}
-		
+
 		for(Actor actor : actorsToDelete)
 		{
-//		    actor.delete();
-		    deleteActor(actor);
+			//		    actor.delete();
+			deleteActor(actor);
 		}
-		
+
 		currentTick++;
 		return true;
 	}
-	
+
 	public Random getRandom()
 	{
 		return rng;
 	}
-	
+
 	public Configuration getConfiguration()
 	{
-	    return configuration;
+		return configuration;
 	}
-	
+
 	public void addActor(Actor actor)
 	{
 		actorsToAdd.add(actor);
@@ -108,10 +108,10 @@ public abstract class Simulator {
 	{
 		actors.remove(actor);
 	}
-	
+
 	private void addWaitingActors()
 	{
-	    actors.addAll(actorsToAdd);
-	    actorsToAdd.clear();
+		actors.addAll(actorsToAdd);
+		actorsToAdd.clear();
 	}
 }

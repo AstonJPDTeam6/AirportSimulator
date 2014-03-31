@@ -16,6 +16,7 @@ public abstract class Simulator {
 	protected long currentTick;
 	
 	public List<Actor> actors;
+	private ArrayList<Actor> actorsToAdd = new ArrayList<Actor>();
 	
 	public Simulator(Configuration configuration, View[] views) {
 		this.views = views;
@@ -31,6 +32,9 @@ public abstract class Simulator {
 		return currentTick;
 	}
 	
+	/**
+	 * Don't actually use this to reset the simulation!
+	 */
 	protected void resetSimulation()
 	{
 		currentTick = 0;
@@ -64,6 +68,7 @@ public abstract class Simulator {
 	
 	public boolean doTick()
 	{
+	    addWaitingActors();
 	    ArrayList<Actor> actorsToDelete = new ArrayList<Actor>();
 	    
 		for(Actor actor : actors)
@@ -71,13 +76,14 @@ public abstract class Simulator {
 			// If any onTicks return false, end the simulation
 			if(!actor.onTick())
 			{
-				actors.add(actor);
+				actorsToAdd.add(actor);
 			}
 		}
 		
 		for(Actor actor : actorsToDelete)
 		{
-		    actor.delete();
+//		    actor.delete();
+		    deleteActor(actor);
 		}
 		
 		currentTick++;
@@ -96,11 +102,16 @@ public abstract class Simulator {
 	
 	public void addActor(Actor actor)
 	{
-		actors.add(actor);
+		actorsToAdd.add(actor);
 	}
 	public void deleteActor(Actor actor)
 	{
 		actors.remove(actor);
 	}
 	
+	private void addWaitingActors()
+	{
+	    actors.addAll(actorsToAdd);
+	    actorsToAdd.clear();
+	}
 }

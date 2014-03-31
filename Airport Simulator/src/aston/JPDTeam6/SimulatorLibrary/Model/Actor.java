@@ -5,6 +5,7 @@ import aston.JPDTeam6.SimulatorLibrary.Simulator;
 public abstract class Actor {
 
 	private Simulator simulator;
+	private boolean shouldRun = true;
 	
 	public Actor(Simulator simulator) {
 		this.simulator = simulator;
@@ -13,7 +14,7 @@ public abstract class Actor {
 	
 	public void delete()
 	{
-		this.simulator.deleteActor(this);
+		shouldRun = false;
 	}
 	
 	public Simulator getSimulator()
@@ -21,6 +22,9 @@ public abstract class Actor {
 		return simulator;
 	}
 	
-	public abstract boolean onTick();
+	public boolean onTick()
+	{
+	    return shouldRun;
+	}
 
 }

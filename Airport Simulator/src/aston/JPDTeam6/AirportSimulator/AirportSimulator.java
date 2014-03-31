@@ -28,11 +28,10 @@ public class AirportSimulator extends Simulator {
 
 	public boolean doTick()
 	{
+	    super.doTick();
 	    spawnPlanes();
 	    
-		super.doTick();
-		
-		return getTick() < 2880; //Maximum number of ticks to stop
+		return getTick() < 10; //Maximum number of ticks to stop
 	}
 	
 	private void spawnPlanes()

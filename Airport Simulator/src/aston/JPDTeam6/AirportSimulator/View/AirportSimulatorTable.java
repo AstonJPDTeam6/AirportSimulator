@@ -2,61 +2,66 @@ package aston.JPDTeam6.AirportSimulator.View;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.ArrayList;
 
 import aston.JPDTeam6.AirportSimulator.AirportSimulator;
 import aston.JPDTeam6.SimulatorLibrary.Simulator;
 import aston.JPDTeam6.SimulatorLibrary.View.GUIview;
 
-
 public class AirportSimulatorTable extends GUIview {
 
 	final int blankSpace = 6;
 	private JTable table;
-	private ArrayList<String> string;
+	private ArrayList<String> tableData;
 
 	public AirportSimulatorTable(){
-		string = new ArrayList<String>();
-		int j=0;
-		while (j<50){
-
-			string.add("1v1 me");
-			j++;
-		}
+		tableData = new ArrayList<String>();
+//		int j=0;
+//		while (j<90){
+//
+//			tableData.add("1v1 me");
+//			j++;
+//		}
+		
 		displayTable();
 	}
 
 	private void displayTable(){
-		table = new JTable((string.size()/3)+2, 3);
-
+		table = new JTable();
+		
+		PlaneCountTableModel pcm = new PlaneCountTableModel();
+		table.setModel(pcm);
+//tableData.size()/2)+1
 		//This section sets the collumn names for the table.
-		table.setValueAt("Tick Num:", 0, 0);
-		table.setValueAt("Event:", 0, 1);
-		table.setValueAt("uw0tm8?:", 0, 2);
+		
+		
+//		table.setValueAt("Tick Num:", 0, 0);
+//		table.setValueAt("Event:", 0, 1);
 
 		//this section sets the content for the cells of the table.
-		int i = 0;
-		int row = 1;
-		int collumn = 0;
-		while(i<string.size()){
-			table.setValueAt(string.get(i),row,collumn);
-			if(collumn==2){
-				collumn=0;
-				row++;
-			}
-			else{
-				collumn++;
-			}
-			i++;
-		}
+//		int i = 0;
+//		int row = 1;
+//		int collumn = 0;
+//		while(i<tableData.size()){
+//			table.setValueAt(tableData.get(i),row,collumn);
+//			if(collumn==1){
+//				collumn=0;
+//				row++;
+//			}
+//			else{
+//				collumn++;
+//			}
+//			i++;
+//		}
 		//this section sets up the rest of the GUI.
 		final JFrame tableFrame = new JFrame("Airport Table");
 		JButton quitButton = new JButton("Quit");
@@ -90,16 +95,81 @@ public class AirportSimulatorTable extends GUIview {
 		tableFrame.setVisible(true);
 	}
 
-
 	public void update(Simulator simulator)
 	{
 		AirportSimulator sim = (AirportSimulator) simulator;
-
-		DefaultTableModel model = (DefaultTableModel) table.getModel();
-		model.addRow(new Object[]{(simulator.getTick()), "...", "1v1 me"});
+		int landQueueCount = sim.airport.landingQueue.size();
+		long tick = sim.getTick();
+		
+		Event event = new Event();
+		event.tick = tick;
+		event.event = String.valueOf(landQueueCount);
+		
+		PlaneCountTableModel model = (PlaneCountTableModel)table.getModel();
+		model.addRow(event);
+		
+		table.repaint();
+//		
+//		DefaultTableModel model = (DefaultTableModel) table.getModel();
+//		model.addRow(new Object[]{(simulator.getTick()), "...", "1v1 me"});
 	}
 
-
 	public void end(Simulator simulator){
+	}
+	
+	private class PlaneCountTableModel extends AbstractTableModel {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8430913283853273362L;
+		private ArrayList<Event> events;
+		
+		public PlaneCountTableModel() {
+			events = new ArrayList<Event>();
+		}
+		
+		public void addRow(Event event) {
+			events.add(event);
+		}
+		
+		public String getColumnName(int column) {
+			switch(column) {
+			case 0:
+				return "Tick";
+			case 1:
+				return "Count";
+			default:
+				return null;
+			}
+		}
+		
+		@Override
+		public int getColumnCount() {
+			return 2;
+		}
+
+		@Override
+		public int getRowCount() {
+			// TODO Auto-generated method stub
+			return events.size();
+		}
+
+		@Override
+		public Object getValueAt(int row, int column) {
+			switch(column) {
+			case 0:
+				return String.valueOf(events.get(row).tick);
+			case 1:
+				return events.get(row).event;
+			}
+			return null;
+		}
+		
+	}
+	
+	private class Event {
+		public long tick;
+		public String event;
 	}
 }

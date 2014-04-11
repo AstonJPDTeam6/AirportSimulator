@@ -10,6 +10,7 @@ public class CLIFrontend {
 		view[0] = new aston.JPDTeam6.AirportSimulator.View.AirportSimulatorGraph();
 		Configuration configs = new Configuration();
 		configs.setOption("commercial probability", 0.6f);
+		configs.setOption("test option", 6);
 		
 		AirportSimulator airportSimulator;
         try

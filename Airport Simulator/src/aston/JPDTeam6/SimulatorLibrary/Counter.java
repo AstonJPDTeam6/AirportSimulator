@@ -7,10 +7,7 @@ public class Counter {
 
 	public HashMap  <String, Long > counts = new HashMap <String, Long>() ;
 
-	public Counter()
-	{
-
-	}
+	public Counter() {}
 
 	public void incrCount(String key){
 		incrCount(key, 1);

@@ -1,7 +1,6 @@
 package aston.JPDTeam6.AirportSimulator.Model.Planes;
 
 import aston.JPDTeam6.AirportSimulator.AirportSimulator;
-import aston.JPDTeam6.SimulatorLibrary.Simulator;
 import aston.JPDTeam6.SimulatorLibrary.Model.Actor;
 
 public abstract class Plane extends Actor {

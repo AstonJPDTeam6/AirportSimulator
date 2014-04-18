@@ -20,18 +20,30 @@ public class Configuration
         }
     }
     
-    public Object getOption(String option, Object defaultValue)
+    @SuppressWarnings("unchecked")
+    public <T> T getOption(String option, T defaultValue)
     {
-        Object value = configurations.get(option);
-        if(value == null)
+        try
+        {
+            return (T) getOption(option);
+        }
+        catch(Exception e)
         {
             return defaultValue;
         }
-        else
-        {
-            return value;
-        }
     }
+//    public Object getOption(String option, Object defaultValue)
+//    {
+//        Object value = configurations.get(option);
+//        if(value == null)
+//        {
+//            return defaultValue;
+//        }
+//        else
+//        {
+//            return value;
+//        }
+//    }
     
     public void setOption(String option, Object value)
     {

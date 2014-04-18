@@ -7,7 +7,7 @@ public class Glider extends Plane {
     private static final long TAKEOFF_TICKS = 6;
     private static final long LANDING_TICKS = 8;
     private static final long MAX_FLYING_TIME = Long.MAX_VALUE;
-    private static final float SPAWN_PROBABILITY = 0.002f;
+    private static final float SPAWN_PROBABILITY = 0.02f;
     
 
 	public Glider(AirportSimulator simulator) {

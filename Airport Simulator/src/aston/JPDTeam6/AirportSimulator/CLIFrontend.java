@@ -8,12 +8,15 @@ public class CLIFrontend {
 
 	public static void main(String[] args) {
 		View[] view = new View[] {
-				new AirportSimulatorGraph(),
-				new AirportSimulatorTable()
+//				new AirportSimulatorGraph(),
+//				new AirportSimulatorTable(),
+				new AirportSimulatorTextView()
 		};
 		
 		Configuration configs = new Configuration();
+		configs.setOption("simulation length", 1000l);
 		configs.setOption("commercial probability", 0.6f);
+		configs.setOption("random seed", 12345l);
 		
 		AirportSimulator airportSimulator;
         try

@@ -6,7 +6,7 @@ public class Light extends Plane {
 
     private static final long TAKEOFF_TICKS = 4;
     private static final long LANDING_TICKS = 6;
-    private static final float SPAWN_PROBABILITY = 0.005f;
+    private static final float SPAWN_PROBABILITY = 0.05f;
     
 	public Glider towedGlider = null;
 	

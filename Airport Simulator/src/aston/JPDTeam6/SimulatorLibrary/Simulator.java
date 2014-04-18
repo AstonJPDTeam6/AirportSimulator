@@ -17,15 +17,15 @@ public abstract class Simulator {
 	protected long currentTick;
 
 	public List<Actor> actors;
-	private ArrayList<Actor> actorsToAdd = new ArrayList<Actor>();
+	private ArrayList<Actor> actorsToAdd;
 
 	public Simulator(Configuration configuration, View[] views) {
 		this.views = views;
 		this.configuration = configuration;
 
-		rng = new Random(1000); //TODO: make the seed configurable
-
-		resetSimulation();
+		rng = new Random();
+		actors = new ArrayList<Actor>();
+		actorsToAdd = new ArrayList<Actor>();
 	}
 
 	public long getTick()
@@ -34,21 +34,10 @@ public abstract class Simulator {
 	}
 
 	/**
-	 * Don't actually use this to reset the simulation!
-	 */
-	protected void resetSimulation()
-	{
-		currentTick = 0;
-		actors = new ArrayList<Actor>();
-	}
-
-	/**
 	 * Automatically runs the simulation
 	 */
 	public void runSimulation()
 	{
-		resetSimulation();
-
 		do
 		{
 			updateViews();
@@ -84,7 +73,7 @@ public abstract class Simulator {
 			// If any onTicks return false, end the simulation
 			if(!actor.onTick())
 			{
-				addActor(actor);
+				actorsToDelete.add(actor); 
 			}
 		}
 
@@ -96,6 +85,9 @@ public abstract class Simulator {
 
 		currentTick++;
 		return true;
+	}
+	protected void updateCounts() {
+	    
 	}
 
 	public Random getRandom()
@@ -126,5 +118,10 @@ public abstract class Simulator {
 	{
 	    actors.addAll(actorsToAdd);
 	    actorsToAdd.clear();
+	}
+	
+	protected void setSeed(long seed)
+	{
+	    rng.setSeed(seed);
 	}
 }

@@ -1,6 +1,5 @@
 package aston.JPDTeam6.AirportSimulator.Model.AirTrafficControllers;
 
-import aston.JPDTeam6.AirportSimulator.AirportSimulator;
 import aston.JPDTeam6.AirportSimulator.Model.Airport;
 import aston.JPDTeam6.AirportSimulator.Model.AirportEvent;
 import aston.JPDTeam6.AirportSimulator.Model.AirportState;

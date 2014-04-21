@@ -3,22 +3,17 @@ import java.util.HashMap;
 
 public class Counter extends HashMap<String, Long> {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -2336428496670115987L;
     
     public Counter() {}
     
+    public void incr(String key) {
+        incr(key, 1);
+    }
     public void incr(String key, long value) {
-        long temp = this.get(key);
+        long temp = get(key);
         
         this.put(key, temp + value);
-    }
-    
-    public long get(String key)
-    {
-        return 0;
     }
     
 }

@@ -10,6 +10,12 @@ public class Counter extends HashMap<String, Long> {
     public void incr(String key) {
         incr(key, 1);
     }
+    
+    /**
+     * Increments the key by an optional value
+     * @param key
+     * @param value
+     */
     public void incr(String key, long value) {
         long temp = get(key);
         

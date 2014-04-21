@@ -2,6 +2,33 @@ package aston.JPDTeam6.SimulatorLibrary;
 
 import java.util.HashMap;
 
+public class Configuration extends HashMap<String, Object>
+{
+    private static final long serialVersionUID = 4957724085517174815L;
+    
+    public Object getOption(String option)
+    {
+        return get(option);
+    }
+    public Object getOption(String option, Object defaultValue)
+    {
+        if(containsKey(option))
+        {
+            return get(option);
+        }
+        else
+        {
+            return defaultValue;
+        }
+    }
+    
+    public void setOption(String option, Object value)
+    {
+        put(option, value);
+    }
+}
+
+/*
 public class Configuration
 {
 
@@ -51,3 +78,4 @@ public class Configuration
     }
 
 }
+*/

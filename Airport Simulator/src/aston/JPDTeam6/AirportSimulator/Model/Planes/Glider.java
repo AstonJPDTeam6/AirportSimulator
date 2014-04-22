@@ -12,10 +12,17 @@ public class Glider extends Plane
     private static final long  MAX_FLYING_TIME   = Long.MAX_VALUE;
     private static final float SPAWN_PROBABILITY = 0.02f;
 
+    private Light towPlane = null;
+    
     public Glider(AirportSimulator simulator, PlaneIntent intent)
     {
         super(simulator, "Glider #" + gliderID++, intent, LANDING_TICKS, TAKEOFF_TICKS, MAX_FLYING_TIME);
-        // TODO Auto-generated constructor stub
+        
+        if(intent == PlaneIntent.TAKING_OFF)
+        {
+            towPlane = new Light(simulator, PlaneIntent.TAKING_OFF, this);
+            simulator.addActor(towPlane);
+        }
     }
 
     public static float getSpawnProbability()
@@ -23,4 +30,9 @@ public class Glider extends Plane
         return SPAWN_PROBABILITY;
     }
 
+    public boolean hasTakenOff()
+    {
+        return towPlane.hasTakenOff();
+    }
+    
 }

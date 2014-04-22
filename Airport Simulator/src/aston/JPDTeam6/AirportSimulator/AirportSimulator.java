@@ -72,12 +72,6 @@ public class AirportSimulator extends Simulator
     private void spawnPlanes()
     {
         float probability = getRandom().nextFloat();
-        //
-        // ArrayList<Plane> planesToAddTakeOff = new ArrayList<Plane>();
-        // ArrayList<Plane> planesToAddLanding = new ArrayList<Plane>();
-
-//         probability = 0f;
-
         if (probability < Glider.getSpawnProbability())
         {
             Glider g;
@@ -88,6 +82,7 @@ public class AirportSimulator extends Simulator
             addActor(g);
         }
 
+        probability = getRandom().nextFloat();
         if (probability < Light.getSpawnProbability())
         {
             Light l;
@@ -98,6 +93,7 @@ public class AirportSimulator extends Simulator
             addActor(l);
         }
 
+        probability = getRandom().nextFloat();
         if (probability < commercialProbability)
         {
             Commercial c;

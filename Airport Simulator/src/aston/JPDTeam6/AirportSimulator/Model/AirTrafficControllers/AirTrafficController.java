@@ -15,6 +15,7 @@ public abstract class AirTrafficController
         this.airport = airport;
     }
 
+    public abstract boolean getTakeoffOrLanding();
     public abstract Plane getNextTakingOff();
     public abstract Plane getNextLanding();
     
@@ -23,8 +24,7 @@ public abstract class AirTrafficController
         Plane currentPlane;
         AirportState airportState;
         
-        //Randomly pick whether a plane should be scheduled to take off or land
-        boolean nextTakeOff = airport.getSimulator().getRandom().nextBoolean();
+        boolean nextTakeOff = getTakeoffOrLanding();
         
         if(nextTakeOff)
         {

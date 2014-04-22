@@ -11,95 +11,110 @@ import aston.JPDTeam6.SimulatorLibrary.Simulator;
 import aston.JPDTeam6.SimulatorLibrary.Model.Actor;
 import aston.JPDTeam6.SimulatorLibrary.View.View;
 
-public class AirportSimulator extends Simulator {
+public class AirportSimulator extends Simulator
+{
 
-	private float commercialProbability;
-	private long  simulationLength;
-	public Airport airport;
-	
-	public AirportSimulator(Configuration configuration, View[] views) throws Exception {
-		super(configuration, views);
-		this.commercialProbability = (float)configuration.getOption("commercial probability");
-		this.simulationLength      = ((Long)configuration.getOption("simulation length")).longValue();
-		
-		setSeed(((Long)configuration.getOption("random seed")).longValue());
-		
+    private float  commercialProbability;
+    private long   simulationLength;
+    public Airport airport;
+
+    public AirportSimulator(Configuration configuration, View[] views) throws Exception
+    {
+        super(configuration, views);
+        this.commercialProbability = (float) configuration.getOption("commercial probability");
+        this.simulationLength = ((Long) configuration.getOption("simulation length")).longValue();
+
+        setSeed(((Long) configuration.getOption("random seed")).longValue());
+
         airport = new Airport(this);
-	}
+        addActor(airport);
+    }
 
-	public boolean doTick()
-	{
-	    super.doTick();
+    public boolean doTick()
+    {
+        spawnPlanes();
         updateCounts();
-	    spawnPlanes();
-	    
-		return getTick() < simulationLength; //Maximum number of ticks to stop
-	}
-	protected void updateCounts()
-	{
-	    Counter c = getCounter();
-	    c.put("number of planes", (long) (airport.takeOffQueue.size() + airport.landingQueue.size()));
-	    c.put("planes taking off", (long) airport.takeOffQueue.size());
-	    c.put("planes landing", (long) airport.landingQueue.size());
-	}
-	
-	private void spawnPlanes()
-	{
-		float probability = getRandom().nextFloat();
-		
-		ArrayList<Plane> planesToAddTakeOff = new ArrayList<Plane>();
-		ArrayList<Plane> planesToAddLanding = new ArrayList<Plane>();
-		
-		probability = 0f;
-		
-		if(probability < Glider.getSpawnProbability())
-		{
-		    Glider g = new Glider(this);
-		    addActor(g);
-		    if(getRandom().nextBoolean())
-		        planesToAddTakeOff.add(g);
-		    else
-		        planesToAddLanding.add(g);
-		}
-		
-		if(probability < Light.getSpawnProbability())
-		{
-		    Light l = new Light(this);
-		    addActor(l);
-		    if(getRandom().nextBoolean())
-		        planesToAddTakeOff.add(l);
-		    else
-		        planesToAddLanding.add(l);
-		}
-		
-		if(probability < commercialProbability)
-		{
-		    Commercial c = new Commercial(this);
-		    addActor(c);
-		    if(getRandom().nextBoolean())
-		        planesToAddTakeOff.add(c);
-		    else
-		        planesToAddLanding.add(c);
-		}
-		
-		Collections.shuffle(planesToAddTakeOff, getRandom());
-		Collections.shuffle(planesToAddLanding, getRandom());
-		
-		for(Plane p : planesToAddTakeOff)
-		{
-		    airport.queueTakeOff(p);
-		}
-		for(Plane p : planesToAddLanding)
-		{
-		    airport.queueLanding(p);
-		}
-	}
-	
-	public void deleteActor(Actor actor)
-	{
-		airport.takeOffQueue.remove(actor);
-		airport.landingQueue.remove(actor);
-		super.deleteActor(actor);
-	}
-	
+
+        return getTick() >= simulationLength; // Maximum number of ticks to stop
+    }
+
+    protected void updateCounts()
+    {
+        Counter c = getCounter();
+
+        long numberOfPlanes = 0;
+        long takingOff = 0;
+        long landing = 0;
+        
+        for(Actor actor : actors)
+        {
+            if(actor instanceof Plane)
+            {
+                Plane plane = (Plane) actor;
+                numberOfPlanes++;
+                
+                if(plane.getIntent() == Plane.PlaneIntent.TAKING_OFF)
+                {
+                    takingOff++;
+                }
+                else
+                {
+                    landing++;
+                }
+            }
+        }
+        
+      c.put("number of planes", numberOfPlanes);
+      c.put("planes taking off", takingOff);
+      c.put("planes landing", landing);
+    }
+
+    private void spawnPlanes()
+    {
+        float probability = getRandom().nextFloat();
+        //
+        // ArrayList<Plane> planesToAddTakeOff = new ArrayList<Plane>();
+        // ArrayList<Plane> planesToAddLanding = new ArrayList<Plane>();
+
+//         probability = 0f;
+
+        if (probability < Glider.getSpawnProbability())
+        {
+            Glider g;
+            if (getRandom().nextBoolean())
+                g = new Glider(this, Plane.PlaneIntent.TAKING_OFF);
+            else
+                g = new Glider(this, Plane.PlaneIntent.LANDING);
+            addActor(g);
+        }
+
+        if (probability < Light.getSpawnProbability())
+        {
+            Light l;
+            if (getRandom().nextBoolean())
+                l = new Light(this, Plane.PlaneIntent.TAKING_OFF);
+            else
+                l = new Light(this, Plane.PlaneIntent.LANDING);
+            addActor(l);
+        }
+
+        if (probability < commercialProbability)
+        {
+            Commercial c;
+            if (getRandom().nextBoolean())
+                c = new Commercial(this, Plane.PlaneIntent.TAKING_OFF);
+            else
+                c = new Commercial(this, Plane.PlaneIntent.LANDING);
+            addActor(c);
+        }
+
+    }
+
+    // public void deleteActor(Actor actor)
+    // {
+    // airport.takeOffQueue.remove(actor);
+    // airport.landingQueue.remove(actor);
+    // super.deleteActor(actor);
+    // }
+
 }

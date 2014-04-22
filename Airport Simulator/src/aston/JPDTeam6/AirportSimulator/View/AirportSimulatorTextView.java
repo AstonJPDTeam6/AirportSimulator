@@ -2,6 +2,8 @@ package aston.JPDTeam6.AirportSimulator.View;
 
 import aston.JPDTeam6.AirportSimulator.AirportSimulator;
 import aston.JPDTeam6.SimulatorLibrary.Counter;
+import aston.JPDTeam6.SimulatorLibrary.Event;
+import aston.JPDTeam6.SimulatorLibrary.EventLog;
 import aston.JPDTeam6.SimulatorLibrary.Simulator;
 import aston.JPDTeam6.SimulatorLibrary.View.TextView;
 
@@ -21,6 +23,15 @@ public class AirportSimulatorTextView extends TextView
         AirportSimulator as = (AirportSimulator) simulator;
         Counter counter = as.getCounter();
         
+        println("Tick #" + as.getTick());
+        
+        printState(as);
+        printCounts(counter);
+        printEvents(as);
+    }
+    
+    private void printCounts(Counter counter)
+    {
         StringBuilder columnSB = new StringBuilder();
         StringBuilder valuesSB = new StringBuilder();
         
@@ -40,13 +51,31 @@ public class AirportSimulatorTextView extends TextView
         
         String hbreak = horizontalBreak(columnString.length());
         
-        println("Tick #" + as.getTick());
         println(hbreak);
         println(columnString);
         println(valuesString);
         println(hbreak);
     }
+    
+    private void printEvents(Simulator sim)
+    {
+        long ctick = sim.getTick();
+        EventLog eventLog = sim.getEventLog();
+        
+        println("Events:");
+        
+        for(Event event : eventLog.getEventsForTick(ctick))
+        {
+            println("* " + event.getName());
+        }
+    }
 
+    private void printState(AirportSimulator as)
+    {
+        print("Airport state: ");
+        println(as.airport.currentAirportEvent.getAirportState().name());
+    }
+    
     private String horizontalBreak(int length)
     {
         StringBuilder sb = new StringBuilder('+');

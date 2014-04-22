@@ -12,20 +12,27 @@ public abstract class Simulator {
 	private View[] views;
 	private Random rng;
 	private Configuration configuration;
-	private Counter counter = new Counter();
+	private Counter counter;
+	private EventLog eventLog;
 
-	protected long currentTick;
+	private long currentTick;
 
 	public List<Actor> actors;
 	private ArrayList<Actor> actorsToAdd;
+	private ArrayList<Actor> actorsToDelete;
 
 	public Simulator(Configuration configuration, View[] views) {
 		this.views = views;
 		this.configuration = configuration;
 
+		counter = new Counter();
+		eventLog = new EventLog(this);
+		
 		rng = new Random();
 		actors = new ArrayList<Actor>();
 		actorsToAdd = new ArrayList<Actor>();
+		actorsToDelete = new ArrayList<Actor>();
+		currentTick = 0;
 	}
 
 	public long getTick()
@@ -38,12 +45,18 @@ public abstract class Simulator {
 	 */
 	public void runSimulation()
 	{
-		do
-		{
-			updateViews();
-		}
-		while(doTick());
-
+	    do
+	    {
+            boolean r = doTick();
+            postTick();
+            
+            if(r) break;
+            
+            updateViews();
+            currentTick++;
+        }
+		while(true);
+        
 		endViews();
 	}
 
@@ -63,32 +76,26 @@ public abstract class Simulator {
 	    }
 	}
 	
-	public boolean doTick()
+	private void postTick()
 	{
 	    addWaitingActors();
-	    ArrayList<Actor> actorsToDelete = new ArrayList<Actor>();
+	    deleteWaitingActors();
 	    
-		for(Actor actor : actors)
-		{
-			// If any onTicks return false, end the simulation
-			if(!actor.onTick())
-			{
-				actorsToDelete.add(actor); 
-			}
-		}
+        for(Actor actor : actors)
+        {
+            // If any onTicks return false, end the simulation
+            if(actor.onTick())
+            {
+                deleteActor(actor); 
+            }
+        }
 
-		for(Actor actor : actorsToDelete)
-		{
-//		    actor.delete();
-		    deleteActor(actor);
-		}
+        deleteWaitingActors();
 
-		currentTick++;
-		return true;
+//        currentTick++;
 	}
-	protected void updateCounts() {
-	    
-	}
+	
+	public abstract boolean doTick();
 
 	public Random getRandom()
 	{
@@ -105,19 +112,29 @@ public abstract class Simulator {
 	    return counter;
 	}
 	
+	public EventLog getEventLog()
+	{
+	    return eventLog;
+	}
+	
 	public void addActor(Actor actor)
 	{
 		actorsToAdd.add(actor);
 	}
 	public void deleteActor(Actor actor)
 	{
-		actors.remove(actor);
+		actorsToDelete.add(actor);
 	}
 
 	private void addWaitingActors()
 	{
 	    actors.addAll(actorsToAdd);
 	    actorsToAdd.clear();
+	}
+	private void deleteWaitingActors()
+	{
+	    actors.removeAll(actorsToDelete);
+	    actorsToDelete.clear();
 	}
 	
 	protected void setSeed(long seed)

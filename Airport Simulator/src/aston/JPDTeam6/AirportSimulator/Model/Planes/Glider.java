@@ -2,22 +2,25 @@ package aston.JPDTeam6.AirportSimulator.Model.Planes;
 
 import aston.JPDTeam6.AirportSimulator.AirportSimulator;
 
-public class Glider extends Plane {
+public class Glider extends Plane
+{
+
+    private static long gliderID = 0;
     
-    private static final long TAKEOFF_TICKS = 6;
-    private static final long LANDING_TICKS = 8;
-    private static final long MAX_FLYING_TIME = Long.MAX_VALUE;
+    private static final long  TAKEOFF_TICKS     = 6;
+    private static final long  LANDING_TICKS     = 8;
+    private static final long  MAX_FLYING_TIME   = Long.MAX_VALUE;
     private static final float SPAWN_PROBABILITY = 0.02f;
-    
 
-	public Glider(AirportSimulator simulator) {
-		super(simulator, LANDING_TICKS, TAKEOFF_TICKS, MAX_FLYING_TIME);
-		// TODO Auto-generated constructor stub
-	}
+    public Glider(AirportSimulator simulator, PlaneIntent intent)
+    {
+        super(simulator, "Glider #" + gliderID++, intent, LANDING_TICKS, TAKEOFF_TICKS, MAX_FLYING_TIME);
+        // TODO Auto-generated constructor stub
+    }
 
-	public static float getSpawnProbability()
-	{
-	    return SPAWN_PROBABILITY;
-	}
-	
+    public static float getSpawnProbability()
+    {
+        return SPAWN_PROBABILITY;
+    }
+
 }

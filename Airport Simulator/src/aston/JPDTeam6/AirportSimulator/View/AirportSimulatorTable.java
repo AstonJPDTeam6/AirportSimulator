@@ -98,7 +98,7 @@ public class AirportSimulatorTable extends GUIview {
 	public void update(Simulator simulator)
 	{
 		AirportSimulator sim = (AirportSimulator) simulator;
-		int landQueueCount = sim.airport.landingQueue.size();
+		long landQueueCount = sim.getCounter().get("planes landing");
 		long tick = sim.getTick();
 		
 		Event event = new Event();

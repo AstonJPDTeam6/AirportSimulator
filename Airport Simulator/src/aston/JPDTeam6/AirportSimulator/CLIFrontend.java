@@ -67,7 +67,7 @@ public class CLIFrontend {
             e.printStackTrace();
             return;
         }
-		
+        
 		airportSimulator.runSimulation();
 	}
 

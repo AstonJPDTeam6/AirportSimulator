@@ -20,7 +20,7 @@ public abstract class Plane extends Actor
     protected PlaneIntent currentIntent;
 
     protected String      planeName;
-    
+
     protected long        spawnTick;
 
     protected long        timeToLand;
@@ -39,9 +39,11 @@ public abstract class Plane extends Actor
         this.maxFlyingTime = maxFlyingTime;
         this.planeName = planeName;
         this.currentIntent = intent;
-        
+
         Event ev = new Event("Plane Created: " + planeName, this, "planecreate");
         getSimulator().getEventLog().addEvent(ev);
+
+        getSimulator().getCounter().incr("total planes created");
     }
 
     @Override
@@ -53,11 +55,12 @@ public abstract class Plane extends Actor
         }
         else if (!isWaiting())
         {
-            if (hasTakenOff())
+            if ((getIntent() == PlaneIntent.TAKING_OFF) && hasTakenOff())
             {
                 onTakenOff();
             }
-            if (hasLanded())
+
+            if ((getIntent() == PlaneIntent.LANDING) && hasLanded())
             {
                 onLanded();
             }
@@ -114,9 +117,11 @@ public abstract class Plane extends Actor
     public void onTakenOff()
     {
         hasTakenOff = true;
-        
+
         Event ev = new Event("Plane Taken Off: " + planeName, this, "takeoff");
         getSimulator().getEventLog().addEvent(ev);
+
+        getSimulator().getCounter().incr("total taken off planes");
     }
 
     public void onLanded()
@@ -124,6 +129,8 @@ public abstract class Plane extends Actor
         hasLanded = true;
         Event ev = new Event("Plane Landed: " + planeName, this, "landed");
         getSimulator().getEventLog().addEvent(ev);
+
+        getSimulator().getCounter().incr("total landed planes");
     }
 
     public void onCrash()
@@ -131,6 +138,8 @@ public abstract class Plane extends Actor
         hasCrashed = true;
         Event ev = new Event("Plane Crashed: " + planeName, this, "crashed");
         getSimulator().getEventLog().addEvent(ev);
+
+        getSimulator().getCounter().incr("total crashed planes");
     }
 
     public boolean isDone()

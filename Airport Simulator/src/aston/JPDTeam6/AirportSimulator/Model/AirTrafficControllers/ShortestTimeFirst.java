@@ -5,47 +5,49 @@ import java.util.List;
 import aston.JPDTeam6.AirportSimulator.Model.Airport;
 import aston.JPDTeam6.AirportSimulator.Model.Planes.Plane;
 
-public class FIFO extends AirTrafficController
+public class ShortestTimeFirst extends AirTrafficController
 {
-
     private boolean lastTakeoffOrLand = false;
 
-    public FIFO(Airport airport)
+    public ShortestTimeFirst(Airport airport)
     {
         super(airport);
     }
 
+    @Override
     public boolean getTakeoffOrLanding()
     {
         lastTakeoffOrLand = !lastTakeoffOrLand;
         return lastTakeoffOrLand;
     }
 
-    private Plane getOldest(List<Plane> planes)
+    private Plane getLeastFuelled(List<Plane> planes)
     {
-        Plane oldestPlane = null;
-
-        for (Plane plane : planes)
+        Plane leastFuelledPlane = null;
+        
+        for(Plane plane : planes)
         {
-            if ((oldestPlane == null || (plane.getSpawnTime() < oldestPlane.getSpawnTime())) && plane.canStart())
+            if((leastFuelledPlane == null || (plane.getFlyingTimeLeft() < leastFuelledPlane.getFlyingTimeLeft())) && plane.canStart() && plane.isWaiting())
             {
-                oldestPlane = plane;
+                leastFuelledPlane = plane;
             }
         }
-
-        return oldestPlane;
+        
+        return leastFuelledPlane;
     }
     
+    @Override
     public Plane getNextTakingOff()
     {
         List<Plane> planes = airport.getPlanesTakingOff();
-        return getOldest(planes);
+        return getLeastFuelled(planes);
     }
 
+    @Override
     public Plane getNextLanding()
     {
         List<Plane> planes = airport.getPlanesLanding();
-        return getOldest(planes);
+        return getLeastFuelled(planes);
     }
 
 }

@@ -9,6 +9,7 @@ public class Glider extends Plane
     
     private static final long  TAKEOFF_TICKS     = 6;
     private static final long  LANDING_TICKS     = 8;
+    private static final long  MIN_FLYING_TIME   = Long.MAX_VALUE;
     private static final long  MAX_FLYING_TIME   = Long.MAX_VALUE;
     private static final float SPAWN_PROBABILITY = 0.02f;
 
@@ -16,7 +17,7 @@ public class Glider extends Plane
     
     public Glider(AirportSimulator simulator, PlaneIntent intent)
     {
-        super(simulator, "Glider #" + gliderID++, intent, LANDING_TICKS, TAKEOFF_TICKS, MAX_FLYING_TIME);
+        super(simulator, "Glider #" + gliderID++, intent, LANDING_TICKS, TAKEOFF_TICKS, MIN_FLYING_TIME, MAX_FLYING_TIME);
         
         if(intent == PlaneIntent.TAKING_OFF)
         {

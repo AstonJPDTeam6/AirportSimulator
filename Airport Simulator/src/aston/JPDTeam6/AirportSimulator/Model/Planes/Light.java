@@ -9,14 +9,15 @@ public class Light extends Plane
     
     private static final long  TAKEOFF_TICKS     = 4;
     private static final long  LANDING_TICKS     = 6;
+    private static final long  MIN_FLYING_TIME   = 20;
+    private static final long  MAX_FLYING_TIME   = 40;
     private static final float SPAWN_PROBABILITY = 0.05f;
 
     public Glider              towedGlider       = null;
 
     public Light(AirportSimulator simulator, PlaneIntent intent)
     {
-        super(simulator, "Light #" + lightID++, intent, LANDING_TICKS, TAKEOFF_TICKS, 0);
-        this.maxFlyingTime = 20 + simulator.getRandom().nextInt(20);
+        super(simulator, "Light #" + lightID++, intent, LANDING_TICKS, TAKEOFF_TICKS, MIN_FLYING_TIME, MAX_FLYING_TIME);
     }
 
     public Light(AirportSimulator simulator, PlaneIntent intent, Glider glider)

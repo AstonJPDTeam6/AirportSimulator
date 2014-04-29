@@ -45,15 +45,15 @@ public class AirportSimulator extends Simulator
         long numberOfPlanes = 0;
         long takingOff = 0;
         long landing = 0;
-        
-        for(Actor actor : actors)
+
+        for (Actor actor : actors)
         {
-            if(actor instanceof Plane)
+            if (actor instanceof Plane)
             {
                 Plane plane = (Plane) actor;
                 numberOfPlanes++;
-                
-                if(plane.getIntent() == Plane.PlaneIntent.TAKING_OFF)
+
+                if (plane.getIntent() == Plane.PlaneIntent.TAKING_OFF)
                 {
                     takingOff++;
                 }
@@ -63,10 +63,15 @@ public class AirportSimulator extends Simulator
                 }
             }
         }
-        
-      c.put("number of planes", numberOfPlanes);
-      c.put("planes taking off", takingOff);
-      c.put("planes landing", landing);
+
+        c.put("number of planes", numberOfPlanes);
+        c.put("planes taking off", takingOff);
+        c.put("planes landing", landing);
+
+        if (airport.currentAirportEvent != null)
+        {
+            c.incr("airport ticks spent " + airport.currentAirportEvent.getAirportState().name());
+        }
     }
 
     private void spawnPlanes()

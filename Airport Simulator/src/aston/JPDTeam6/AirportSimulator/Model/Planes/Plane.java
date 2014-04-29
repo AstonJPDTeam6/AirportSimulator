@@ -1,11 +1,14 @@
 package aston.JPDTeam6.AirportSimulator.Model.Planes;
 
+import java.util.Random;
+
 import aston.JPDTeam6.AirportSimulator.AirportSimulator;
 import aston.JPDTeam6.SimulatorLibrary.Event;
 import aston.JPDTeam6.SimulatorLibrary.Model.Actor;
 
 public abstract class Plane extends Actor
 {
+    public static final long TIME_TO_REPAIR = 120;
 
     public static enum PlaneIntent
     {
@@ -25,20 +28,36 @@ public abstract class Plane extends Actor
 
     protected long        timeToLand;
     protected long        timeToTakeOff;
-    protected long        maxFlyingTime;
+    protected long        flyingTime;
+    protected long        breakdownTime  = 0;
+
+    protected long        queuedTime;
 
     public long           planeEventTick = 0;
 
-    public Plane(AirportSimulator simulator, String planeName, PlaneIntent intent, long timeToLand, long timeToTakeOff, long maxFlyingTime)
+    public Plane(AirportSimulator simulator, String planeName, PlaneIntent intent, long timeToLand, long timeToTakeOff, long minFlyingTime, long maxFlyingTime)
     {
         super(simulator);
         spawnTick = simulator.getTick();
 
         this.timeToLand = timeToLand;
         this.timeToTakeOff = timeToTakeOff;
-        this.maxFlyingTime = maxFlyingTime;
         this.planeName = planeName;
         this.currentIntent = intent;
+        this.queuedTime = spawnTick;
+
+        Random rng = simulator.getRandom();
+
+        if (minFlyingTime != maxFlyingTime)
+        {
+            // this.flyingTime = minFlyingTime + (rng.nextLong() %
+            // (maxFlyingTime - minFlyingTime)); //Uneven distribution
+            this.flyingTime = minFlyingTime + (long) (rng.nextDouble() * (maxFlyingTime - minFlyingTime));
+        }
+        else
+        {
+            this.flyingTime = minFlyingTime;
+        }
 
         Event ev = new Event("Plane Created: " + planeName, this, "planecreate");
         getSimulator().getEventLog().addEvent(ev);
@@ -65,6 +84,18 @@ public abstract class Plane extends Actor
                 onLanded();
             }
         }
+        else
+        {
+            if (!hasBrokendown() && willBreakdown())
+            {
+                onBreakdown();
+            }
+            else if (hasRepaired())
+            {
+                onRepair();
+            }
+        }
+
         return isDone();
     }
 
@@ -78,9 +109,14 @@ public abstract class Plane extends Actor
         return timeToTakeOff;
     }
 
-    public long getMaxFlyingTime()
+    public long getFlyingTime()
     {
-        return maxFlyingTime;
+        return flyingTime;
+    }
+
+    public long getQueuedTime()
+    {
+        return queuedTime;
     }
 
     public static float getSpawnProbability() throws Exception
@@ -88,8 +124,15 @@ public abstract class Plane extends Actor
         throw new Exception("Must be implemented in child");
     }
 
+    public boolean canStart()
+    {
+        return canFly() && !hasBrokendown() && isWaiting();
+    }
+
     public void start()
     {
+        assert (hasBrokendown() == false);
+
         planeEventTick = getSimulator().getTick();
         isWaiting = false;
     }
@@ -104,9 +147,19 @@ public abstract class Plane extends Actor
         return (planeEventTick + timeToLand) < getSimulator().getTick();
     }
 
+    public boolean hasBrokendown()
+    {
+        return (breakdownTime + TIME_TO_REPAIR) < getSimulator().getTick();
+    }
+
+    public boolean hasRepaired()
+    {
+        return (breakdownTime + TIME_TO_REPAIR) == getSimulator().getTick();
+    }
+
     public long getFlyingTimeLeft()
     {
-        return (spawnTick + maxFlyingTime) - getSimulator().getTick();
+        return (spawnTick + flyingTime) - getSimulator().getTick();
     }
 
     public boolean canFly()
@@ -127,6 +180,7 @@ public abstract class Plane extends Actor
     public void onLanded()
     {
         hasLanded = true;
+
         Event ev = new Event("Plane Landed: " + planeName, this, "landed");
         getSimulator().getEventLog().addEvent(ev);
 
@@ -136,10 +190,30 @@ public abstract class Plane extends Actor
     public void onCrash()
     {
         hasCrashed = true;
+
         Event ev = new Event("Plane Crashed: " + planeName, this, "crashed");
         getSimulator().getEventLog().addEvent(ev);
 
         getSimulator().getCounter().incr("total crashed planes");
+    }
+
+    public void onBreakdown()
+    {
+        breakdownTime = getSimulator().getTick();
+        queuedTime = breakdownTime + TIME_TO_REPAIR;
+
+        Event ev = new Event("Plane Breakdown: " + planeName, this, "breakdown");
+        getSimulator().getEventLog().addEvent(ev);
+
+        getSimulator().getCounter().incr("total breakdowns");
+    }
+
+    public void onRepair()
+    {
+        Event ev = new Event("Plane Repaired: " + planeName, this, "repair");
+        getSimulator().getEventLog().addEvent(ev);
+
+        getSimulator().getCounter().incr("total repairs");
     }
 
     public boolean isDone()
@@ -161,4 +235,11 @@ public abstract class Plane extends Actor
     {
         return isWaiting;
     }
+
+    private boolean willBreakdown()
+    {
+        Random rng = getSimulator().getRandom();
+        return rng.nextDouble() <= 0.0001;
+    }
+
 }

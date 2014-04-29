@@ -9,11 +9,12 @@ public class Commercial extends Plane
     
     private static final long TAKEOFF_TICKS = 4;
     private static final long LANDING_TICKS = 6;
+    private static final long MAX_FLYING_TIME = 80;
+    private static final long MIN_FLYING_TIME = 40;
 
     public Commercial(AirportSimulator simulator, PlaneIntent intent)
     {
-        super(simulator, "Commercial #" + commercialID++, intent, LANDING_TICKS, TAKEOFF_TICKS, 0);
-        this.maxFlyingTime = 40 + simulator.getRandom().nextInt(40);
+        super(simulator, "Commercial #" + commercialID++, intent, LANDING_TICKS, TAKEOFF_TICKS, MIN_FLYING_TIME, MAX_FLYING_TIME);
     }
 
 }

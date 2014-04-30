@@ -78,7 +78,7 @@ public class AirportSimulatorTextView extends TextView
     
     private String horizontalBreak(int length)
     {
-        StringBuilder sb = new StringBuilder('+');
+        StringBuilder sb = new StringBuilder("+");
         
         while(length-- > 2) //Leave 2 characters free for the +s
         {

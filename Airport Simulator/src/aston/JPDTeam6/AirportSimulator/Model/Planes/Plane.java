@@ -126,7 +126,7 @@ public abstract class Plane extends Actor
 
     public boolean canStart()
     {
-        return canFly() && !hasBrokendown() && isWaiting();
+        return canFly() && (!hasBrokendown()) && isWaiting();
     }
 
     public void start()
@@ -149,7 +149,7 @@ public abstract class Plane extends Actor
 
     public boolean hasBrokendown()
     {
-        return (breakdownTime + TIME_TO_REPAIR) < getSimulator().getTick();
+        return (breakdownTime + TIME_TO_REPAIR) > getSimulator().getTick();
     }
 
     public boolean hasRepaired()

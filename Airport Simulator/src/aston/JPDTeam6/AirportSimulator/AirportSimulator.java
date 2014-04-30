@@ -46,6 +46,8 @@ public class AirportSimulator extends Simulator
         long takingOff = 0;
         long landing = 0;
 
+        long planesCanStart = 0;
+        
         for (Actor actor : actors)
         {
             if (actor instanceof Plane)
@@ -61,12 +63,18 @@ public class AirportSimulator extends Simulator
                 {
                     landing++;
                 }
+                
+                if (plane.canStart())
+                {
+                    planesCanStart++;
+                }
             }
         }
 
         c.put("number of planes", numberOfPlanes);
         c.put("planes taking off", takingOff);
         c.put("planes landing", landing);
+        c.put("planes can start", planesCanStart);
 
         if (airport.currentAirportEvent != null)
         {

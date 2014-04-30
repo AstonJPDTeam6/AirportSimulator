@@ -15,10 +15,25 @@ public class FIFO extends AirTrafficController
         super(airport);
     }
 
+    /**
+     * @return true means taking off, false means landing
+     */
     public boolean getTakeoffOrLanding()
     {
-        lastTakeoffOrLand = !lastTakeoffOrLand;
-        return lastTakeoffOrLand;
+        boolean planesTakingOff = airport.getPlanesTakingOff().size() > 0;
+        boolean planesLanding   = airport.getPlanesLanding().size() > 0;
+        
+        if(planesTakingOff && planesLanding) {
+            lastTakeoffOrLand = !lastTakeoffOrLand;
+            return lastTakeoffOrLand;
+        }
+        else
+        {
+            if(planesTakingOff)
+                return true;
+            else
+                return false;
+        }
     }
 
     private Plane getOldest(List<Plane> planes)
@@ -27,7 +42,7 @@ public class FIFO extends AirTrafficController
 
         for (Plane plane : planes)
         {
-            if ((oldestPlane == null || (plane.getSpawnTime() < oldestPlane.getSpawnTime())) && plane.canStart())
+            if ((oldestPlane == null || (plane.getQueuedTime() < oldestPlane.getQueuedTime())) && plane.canStart())
             {
                 oldestPlane = plane;
             }

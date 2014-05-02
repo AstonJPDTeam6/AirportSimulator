@@ -138,7 +138,10 @@ public class AirportSimulatorTable extends GUIview {
 
 	}
 
-	public void end(Simulator simulator){
+	public void end(Simulator simulator1){
+		{
+			update(simulator1);
+		}
 	}
 
 	//	private class PlaneCountTableModel extends AbstractTableModel {

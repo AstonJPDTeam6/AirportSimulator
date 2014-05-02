@@ -1,199 +1,108 @@
 package aston.JPDTeam6.AirportSimulator.View;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 import aston.JPDTeam6.AirportSimulator.AirportSimulator;
-import aston.JPDTeam6.AirportSimulator.CLIFrontend;
 import aston.JPDTeam6.SimulatorLibrary.Counter;
 import aston.JPDTeam6.SimulatorLibrary.Simulator;
 import aston.JPDTeam6.SimulatorLibrary.View.GUIview;
 
-public class AirportSimulatorTable extends GUIview {
+public class AirportSimulatorTable extends GUIview
+{
 
-	final int blankSpace = 6;
-	private JTable table;
-	private ArrayList<String> tableData;
+    private final int      blankSpace = 6;
+    private JTable table;
 
-	public AirportSimulatorTable(){
-		tableData = new ArrayList<String>();
-		//		int j=0;
-		//		while (j<90){
-		//
-		//			tableData.add("1v1 me");
-		//			j++;
-		//		}
+    public AirportSimulatorTable()
+    {
+        displayTable();
+    }
 
-		displayTable();
-	}
+    private void displayTable()
+    {
+        table = new JTable();
 
-	private void displayTable(){
-		table = new JTable(1,4);
+        // this section sets up the rest of the GUI.
+        final JFrame tableFrame = new JFrame("Airport Table");
+        JButton quitButton = new JButton("Quit");
 
-		//		PlaneCountTableModel pcm = new PlaneCountTableModel();
-		//		table.setModel(pcm);
+        quitButton.setMaximumSize(new Dimension(10, 10));
 
+        JPanel buttonsPanel = new JPanel();
 
-		//tableData.size()/2)+1
-		//This section sets the collumn names for the table.
+        JScrollPane tableScroll = new JScrollPane(table);
 
+        buttonsPanel.setLayout(new FlowLayout());
+        buttonsPanel.add(quitButton);
 
+        tableFrame.setLayout(new BorderLayout());
+        ((JPanel) tableFrame.getContentPane()).setBorder(new EmptyBorder(blankSpace, blankSpace, blankSpace, blankSpace));
 
-		table.setValueAt("Tick Num:", 0, 0);
-		table.setValueAt("Planes landing", 0, 1);
-		table.setValueAt("Planes taking off", 0, 2);
-		table.setValueAt("No. of Planes:", 0, 3);
-		//this section sets the content for the cells of the table.
-		//		int i = 0;
-		//		int row = 1;
-		//		int collumn = 0;
-		//		while(i<tableData.size()){
-		//			table.setValueAt(tableData.get(i),row,collumn);
-		//			if(collumn==1){
-		//				collumn=0;
-		//				row++;
-		//			}
-		//			else{
-		//				collumn++;
-		//			}
-		//			i++;
-		//		}
-		//this section sets up the rest of the GUI.
-		final JFrame tableFrame = new JFrame("Airport Table");
-		JButton quitButton = new JButton("Quit");
+        tableFrame.add(tableScroll, BorderLayout.CENTER);
+        tableFrame.add(buttonsPanel, BorderLayout.SOUTH);
 
-		quitButton.setMaximumSize(new Dimension(10, 10));
+        tableFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-		JPanel tablePanel = new JPanel();
-		JPanel buttonsPanel = new JPanel();
+        quitButton.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent e)
+                {
+                    tableFrame.dispose();
+                }
+            });
 
-		tablePanel.setLayout(new FlowLayout());
-		tablePanel.add(table);
+        tableFrame.pack();
+        tableFrame.setVisible(true);
+    }
 
-		buttonsPanel.setLayout(new FlowLayout());
-		buttonsPanel.add(quitButton);
+    public void update(Simulator simulator)
+    {
+        AirportSimulator sim = (AirportSimulator) simulator;
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        Counter counter = sim.getCounter();
 
-		tableFrame.setLayout(new BorderLayout());
-		((JPanel)tableFrame.getContentPane()).setBorder(new 
-				EmptyBorder(blankSpace, blankSpace, blankSpace, blankSpace));
-		tableFrame.add(tablePanel, BorderLayout.NORTH);
-		tableFrame.add(buttonsPanel, BorderLayout.SOUTH);
+        ArrayList<Object> rowData = new ArrayList<Object>();
 
-		tableFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        rowData.add(sim.getTick());
 
-		quitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				tableFrame.dispose();
-			}
-		});
+        if (model.findColumn("Tick #") == -1)
+        {
+            model.addColumn("Tick #");
+        }
 
-		tableFrame.pack();
-		tableFrame.setVisible(true);
-	}
+        for (Entry<String, Long> row : counter.entrySet())
+        {
+            Long val = row.getValue();
+            String key = row.getKey();
 
-	public void update(Simulator simulator)
-	{
-		AirportSimulator sim = (AirportSimulator) simulator;
-		//		int landQueueCount = sim.airport.landingQueue.size();
-		//		long tick = sim.getTick();
+            if (model.findColumn(key) == -1)
+            {
 
-		//		Event event = new Event();
-		//		event.tick = tick;
-		//		event.event = String.valueOf(landQueueCount);
-		//
-		//		PlaneCountTableModel model = (PlaneCountTableModel)table.getModel();
-		//		model.addRow(event);
-		//
-		//		table.repaint();
+                model.addColumn(key);
+            }
 
-		Counter counter = sim.getCounter();
-		String planesLanding = "None";
-		String planesTakingOff = "None";
-		String numberOfPlanes = "None";
+            rowData.add(val);
+        }
 
-		for(String key : counter.keySet()){
-			String val = String.valueOf(counter.get(key));
-			if (planesLanding == "None"){
-				planesLanding = val;
-			}
-			else if (planesTakingOff == "None"){
-				planesTakingOff = val;
-			}
-			else if (numberOfPlanes == "None"){
-				numberOfPlanes = val;
-			};
-		}
-		DefaultTableModel model = (DefaultTableModel) table.getModel();
-		model.addRow(new Object[]{(sim.getTick()), planesLanding, planesTakingOff, numberOfPlanes});
+        model.addRow(rowData.toArray());
+    }
 
-	}
-
-	public void end(Simulator simulator){
-	}
-
-	//	private class PlaneCountTableModel extends AbstractTableModel {
-	//
-	//		/**
-	//		 * 
-	//		 */
-	//		private static final long serialVersionUID = 8430913283853273362L;
-	//		private ArrayList<Event> events;
-	//
-	//		public PlaneCountTableModel() {
-	//			events = new ArrayList<Event>();
-	//		}
-	//
-	//		public void addRow(Event event) {
-	//			events.add(event);
-	//		}
-	//
-	//		public String getColumnName(int column) {
-	//			switch(column) {
-	//			case 0:
-	//				return "Tick";
-	//			case 1:
-	//				return "Count";
-	//			default:
-	//				return null;
-	//			}
-	//		}
-	//
-	//		@Override
-	//		public int getColumnCount() {
-	//			return 2;
-	//		}
-	//
-	//		@Override
-	//		public int getRowCount() {
-	//			// TODO Auto-generated method stub
-	//			return events.size();
-	//		}
-	//
-	//		@Override
-	//		public Object getValueAt(int row, int column) {
-	//			switch(column) {
-	//			case 0:
-	//				return String.valueOf(events.get(row).tick);
-	//			case 1:
-	//				return events.get(row).event;
-	//			}
-	//			return null;
-	//		}
-	//
-	//	}
-	//
-	//	private class Event {
-	//		public long tick;
-	//		public String event;
-	//	}
+    public void end(Simulator simulator)
+    {
+        update(simulator);
+    }
 }

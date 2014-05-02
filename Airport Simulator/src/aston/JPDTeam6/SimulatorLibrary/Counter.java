@@ -1,8 +1,8 @@
 package aston.JPDTeam6.SimulatorLibrary;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
-public class Counter extends HashMap<String, Long>
+public class Counter extends LinkedHashMap<String, Long>
 {
 
     private static final long serialVersionUID = -2336428496670115987L;

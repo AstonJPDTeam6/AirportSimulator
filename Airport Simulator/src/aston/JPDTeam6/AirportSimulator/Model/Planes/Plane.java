@@ -29,7 +29,7 @@ public abstract class Plane extends Actor
     protected long        timeToLand;
     protected long        timeToTakeOff;
     protected long        flyingTime;
-    protected long        breakdownTime  = 0;
+    protected long        breakdownTime  = -1;
 
     protected long        queuedTime;
 
@@ -149,11 +149,13 @@ public abstract class Plane extends Actor
 
     public boolean hasBrokendown()
     {
+        if(breakdownTime == -1) return false;
         return (breakdownTime + TIME_TO_REPAIR) > getSimulator().getTick();
     }
 
     public boolean hasRepaired()
     {
+        if(breakdownTime == -1) return false;
         return (breakdownTime + TIME_TO_REPAIR) == getSimulator().getTick();
     }
 

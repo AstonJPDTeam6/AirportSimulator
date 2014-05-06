@@ -9,6 +9,8 @@ public class ShortestTimeFirst extends AirTrafficController
 {
     private boolean lastTakeoffOrLand = false;
 
+    public ShortestTimeFirst() {}
+    
     public ShortestTimeFirst(Airport airport)
     {
         super(airport);

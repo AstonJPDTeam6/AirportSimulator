@@ -1,9 +1,7 @@
 package aston.JPDTeam6.AirportSimulator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import aston.JPDTeam6.AirportSimulator.Model.Airport;
+import aston.JPDTeam6.AirportSimulator.Model.AirTrafficControllers.AirTrafficController;
 import aston.JPDTeam6.AirportSimulator.Model.Planes.*;
 import aston.JPDTeam6.SimulatorLibrary.Configuration;
 import aston.JPDTeam6.SimulatorLibrary.Counter;
@@ -18,7 +16,7 @@ public class AirportSimulator extends Simulator
     private long   simulationLength;
     public Airport airport;
 
-    public AirportSimulator(Configuration configuration, View[] views) throws Exception
+    public AirportSimulator(Configuration configuration, View[] views, AirTrafficController atc) throws Exception
     {
         super(configuration, views);
         this.commercialProbability = (float) configuration.getOption("commercial probability");
@@ -26,7 +24,8 @@ public class AirportSimulator extends Simulator
 
         setSeed(((Long) configuration.getOption("random seed")).longValue());
 
-        airport = new Airport(this);
+        airport = new Airport(this, atc);
+        atc.setAirport(airport);
         addActor(airport);
     }
 

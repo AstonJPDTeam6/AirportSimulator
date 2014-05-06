@@ -15,6 +15,11 @@ public class FIFO extends AirTrafficController
         super(airport);
     }
 
+    public FIFO()
+    {
+        super();
+    }
+
     /**
      * @return true means taking off, false means landing
      */

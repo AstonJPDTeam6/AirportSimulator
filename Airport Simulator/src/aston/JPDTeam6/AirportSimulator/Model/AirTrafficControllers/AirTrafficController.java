@@ -10,6 +10,8 @@ public abstract class AirTrafficController
 
     protected Airport airport;
     
+    public AirTrafficController() {}
+    
     public AirTrafficController(Airport airport)
     {
         this.airport = airport;
@@ -47,4 +49,8 @@ public abstract class AirTrafficController
         return ae;
     }
     
+    public void setAirport(Airport airport)
+    {
+        this.airport = airport;
+    }
 }

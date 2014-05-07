@@ -19,8 +19,20 @@ public class ShortestTimeFirst extends AirTrafficController
     @Override
     public boolean getTakeoffOrLanding()
     {
-        lastTakeoffOrLand = !lastTakeoffOrLand;
-        return lastTakeoffOrLand;
+        boolean planesTakingOff = airport.getPlanesTakingOff().size() > 0;
+        boolean planesLanding   = airport.getPlanesLanding().size() > 0;
+        
+        if(planesTakingOff && planesLanding) {
+            lastTakeoffOrLand = !lastTakeoffOrLand;
+            return lastTakeoffOrLand;
+        }
+        else
+        {
+            if(planesTakingOff)
+                return true;
+            else
+                return false;
+        }
     }
 
     private Plane getLeastFuelled(List<Plane> planes)

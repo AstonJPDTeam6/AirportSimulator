@@ -11,7 +11,7 @@ public class Light extends Plane
     private static final long  LANDING_TICKS     = 6;
     private static final long  MIN_FLYING_TIME   = 20;
     private static final long  MAX_FLYING_TIME   = 40;
-    private static final float SPAWN_PROBABILITY = 0.05f;
+    private static final float SPAWN_PROBABILITY = 0.005f;
 
     public Glider              towedGlider       = null;
 
@@ -32,8 +32,10 @@ public class Light extends Plane
     {
         if (towedGlider != null)
         {
+            getSimulator().getCounter().incr("light landing after glider takeoff");
+            
             setIntent(PlaneIntent.LANDING);
-//            ((AirportSimulator) getSimulator()).airport.queueLanding(this);
+            towedGlider = null;
         }
         else
         {

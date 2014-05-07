@@ -12,7 +12,7 @@ public class Event
 
     public Event(String name, Actor actor, String type)
     {
-        this(name, actor, "", type);
+        this(name, actor, type, "");
     }
 
     public Event(String name, Actor actor, String type, String detail)

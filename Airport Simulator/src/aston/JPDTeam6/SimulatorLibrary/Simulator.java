@@ -7,6 +7,9 @@ import java.util.Random;
 import aston.JPDTeam6.SimulatorLibrary.Model.Actor;
 import aston.JPDTeam6.SimulatorLibrary.View.View;
 
+/**
+ * The base simulator class. Any simulators must extend this
+ */
 public abstract class Simulator {
 
 	private View[] views;
@@ -21,6 +24,11 @@ public abstract class Simulator {
 	private ArrayList<Actor> actorsToAdd;
 	private ArrayList<Actor> actorsToDelete;
 
+	
+	/**
+	 * @param configuration 
+	 * @param views An array of View objects that you want the simulator to output to
+	 */
 	public Simulator(Configuration configuration, View[] views) {
 		this.views = views;
 		this.configuration = configuration;
@@ -41,7 +49,7 @@ public abstract class Simulator {
 	}
 
 	/**
-	 * Automatically runs the simulation
+	 * Call this to start the simulation
 	 */
 	public void runSimulation()
 	{
@@ -97,6 +105,11 @@ public abstract class Simulator {
 	
 	public abstract boolean doTick();
 
+	
+	/**
+	 * Use this for any instances of Random required. It is seeded by configuration.
+	 * @return simulator seeded random
+	 */
 	public Random getRandom()
 	{
 		return rng;
@@ -137,7 +150,7 @@ public abstract class Simulator {
 	    actorsToDelete.clear();
 	}
 	
-	protected void setSeed(long seed)
+	public void setSeed(long seed)
 	{
 	    rng.setSeed(seed);
 	}

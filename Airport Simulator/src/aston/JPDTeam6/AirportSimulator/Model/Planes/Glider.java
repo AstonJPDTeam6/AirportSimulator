@@ -11,7 +11,7 @@ public class Glider extends Plane
     private static final long  LANDING_TICKS     = 8;
     private static final long  MIN_FLYING_TIME   = Long.MAX_VALUE;
     private static final long  MAX_FLYING_TIME   = Long.MAX_VALUE;
-    private static final float SPAWN_PROBABILITY = 0.02f;
+    private static final float SPAWN_PROBABILITY = 0.002f;
 
     private Light towPlane = null;
     
@@ -33,7 +33,17 @@ public class Glider extends Plane
 
     public boolean hasTakenOff()
     {
-        return towPlane.hasTakenOff();
+        if(towPlane != null)
+            return towPlane.hasTakenOff();
+        else
+            return super.hasTakenOff();
+    }
+    
+    public void onTakenOff()
+    {
+        getSimulator().getCounter().incr("gliders taken off");
+        
+        super.onTakenOff();
     }
     
 }

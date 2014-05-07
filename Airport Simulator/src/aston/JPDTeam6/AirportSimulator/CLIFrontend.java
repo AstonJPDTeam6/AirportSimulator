@@ -25,11 +25,14 @@ public class CLIFrontend
         validViews.put("text",  AirportSimulatorTextView.class);
         validViews.put("graph", AirportSimulatorGraph.class);
         validViews.put("table", AirportSimulatorTable.class);
+        validViews.put("plaincounter", AirportSimulatorParseableCounter.class);
 
         validATC.put("fifo",   FIFO.class);
         validATC.put("random", RandomPick.class);
         validATC.put("stf",    ShortestTimeFirst.class);
     }
+    
+    private CLIFrontend() {}
 
     private static class CLIFrontendParameters
     {
@@ -45,11 +48,14 @@ public class CLIFrontend
         @Parameter(names = { "-s", "--seed" }, description = "The seed to use for the random number generator")
         private Long         seed                  = (new Random()).nextLong();
 
-        @Parameter(names = { "-v", "--view" }, description = "Views to use. Valid options are: text, graph and table")
+        @Parameter(names = { "-v", "--view" }, description = "Views to use. Valid options are: text, graph, plaincounter and table")
         private List<String> views                 = new ArrayList<String>(Arrays.asList("text"));
 
         @Parameter(names = { "-c", "--air-trafic-controller" }, description = "Options: fifo, random, stf. Default: fifo")
         private String       airTrafficController  = "fifo";
+        
+        @Parameter(names = { "--gui" }, description = "Starts with a GUI, ignores command line parameters")
+        private Boolean      enableGUI = false;
     }
 
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
@@ -61,6 +67,13 @@ public class CLIFrontend
         
         new JCommander(cfp, args);
 
+        if(cfp.enableGUI)
+        {
+            GUIFrontend.main(args);
+//            System.exit(0);
+            return;
+        }
+        
         for (String viewType : cfp.views)
         {
             if (validViews.containsKey(viewType))

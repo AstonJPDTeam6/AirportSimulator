@@ -44,7 +44,7 @@ public class RandomPick extends AirTrafficController
             return null;
         }
         
-        int randK = (int)Math.floor(getRNG().nextDouble() * planes.size());
+        int randK = getRNG().nextInt(planes.size());
         return planes.get(randK);
     }
     

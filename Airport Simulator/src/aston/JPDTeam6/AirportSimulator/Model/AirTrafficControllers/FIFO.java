@@ -26,15 +26,16 @@ public class FIFO extends AirTrafficController
     public boolean getTakeoffOrLanding()
     {
         boolean planesTakingOff = airport.getPlanesTakingOff().size() > 0;
-        boolean planesLanding   = airport.getPlanesLanding().size() > 0;
-        
-        if(planesTakingOff && planesLanding) {
+        boolean planesLanding = airport.getPlanesLanding().size() > 0;
+
+        if (planesTakingOff && planesLanding)
+        {
             lastTakeoffOrLand = !lastTakeoffOrLand;
             return lastTakeoffOrLand;
         }
         else
         {
-            if(planesTakingOff)
+            if (planesTakingOff)
                 return true;
             else
                 return false;
@@ -55,7 +56,7 @@ public class FIFO extends AirTrafficController
 
         return oldestPlane;
     }
-    
+
     public Plane getNextTakingOff()
     {
         List<Plane> planes = airport.getPlanesTakingOff();

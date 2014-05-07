@@ -149,7 +149,7 @@ public abstract class Plane extends Actor
 
     public boolean hasBrokendown()
     {
-        if(breakdownTime == Long.MIN_VALUE)
+        if (breakdownTime == Long.MIN_VALUE)
         {
             return false;
         }
@@ -161,7 +161,7 @@ public abstract class Plane extends Actor
 
     public boolean hasRepaired()
     {
-        if(hasBrokendown())
+        if (hasBrokendown())
         {
             return (getSimulator().getTick() - breakdownTime) == TIME_TO_REPAIR;
         }

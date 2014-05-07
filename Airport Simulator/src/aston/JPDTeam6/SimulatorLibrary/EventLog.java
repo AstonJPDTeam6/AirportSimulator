@@ -16,6 +16,11 @@ public class EventLog
         this.simulator = simulator;
     }
 
+    /**
+     * Adds an event to the log for the current tick
+     * 
+     * @param event
+     */
     public void addEvent(Event event)
     {
         long ct = simulator.getTick();
@@ -29,6 +34,10 @@ public class EventLog
         currentTick.add(event);
     }
 
+    /**
+     * @param tick
+     * @return list of events that happened in the specified tick
+     */
     public final List<Event> getEventsForTick(long tick)
     {
         List<Event> currentTick = (ArrayList<Event>) events.get(tick);

@@ -25,14 +25,16 @@ public class AirportSimulatorGraph extends GUIview
 
     }
 
-//    private void exitApp()
-//    {
-//        int response = JOptionPane.showConfirmDialog(frame, "Do you really want to quit?", "Quit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-//        if (response == JOptionPane.YES_OPTION)
-//        {
-//            System.exit(0);
-//        }
-//    }
+    // private void exitApp()
+    // {
+    // int response = JOptionPane.showConfirmDialog(frame,
+    // "Do you really want to quit?", "Quit?", JOptionPane.YES_NO_OPTION,
+    // JOptionPane.QUESTION_MESSAGE);
+    // if (response == JOptionPane.YES_OPTION)
+    // {
+    // System.exit(0);
+    // }
+    // }
 
     public void update(Simulator simulator)
     {

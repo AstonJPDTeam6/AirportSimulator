@@ -5,10 +5,10 @@ import aston.JPDTeam6.AirportSimulator.AirportSimulator;
 public class Commercial extends Plane
 {
 
-    private static long commercialID = 0;
-    
-    private static final long TAKEOFF_TICKS = 4;
-    private static final long LANDING_TICKS = 6;
+    private static long       commercialID    = 0;
+
+    private static final long TAKEOFF_TICKS   = 4;
+    private static final long LANDING_TICKS   = 6;
     private static final long MAX_FLYING_TIME = 80;
     private static final long MIN_FLYING_TIME = 40;
 

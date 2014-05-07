@@ -11,7 +11,6 @@ import aston.JPDTeam6.SimulatorLibrary.View.View;
 
 public class AirportSimulator extends Simulator
 {
-
     private float  commercialProbability;
     private long   simulationLength;
     public Airport airport;
@@ -22,7 +21,12 @@ public class AirportSimulator extends Simulator
         this.commercialProbability = (float) configuration.getOption("commercial probability");
         this.simulationLength = ((Long) configuration.getOption("simulation length")).longValue();
 
-        setSeed(((Long) configuration.getOption("random seed")).longValue());
+        long seed = ((Long) configuration.getOption("random seed", 0l)).longValue();
+
+        if (seed != 0)
+        {
+            setSeed(seed);
+        }
 
         airport = new Airport(this, atc);
         atc.setAirport(airport);
@@ -46,7 +50,7 @@ public class AirportSimulator extends Simulator
         long landing = 0;
 
         long planesCanStart = 0;
-        
+
         for (Actor actor : actors)
         {
             if (actor instanceof Plane)
@@ -62,7 +66,7 @@ public class AirportSimulator extends Simulator
                 {
                     landing++;
                 }
-                
+
                 if (plane.canStart())
                 {
                     planesCanStart++;

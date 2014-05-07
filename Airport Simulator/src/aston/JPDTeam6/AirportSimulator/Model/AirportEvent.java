@@ -4,9 +4,9 @@ import aston.JPDTeam6.AirportSimulator.Model.Planes.Plane;
 
 public class AirportEvent
 {
-    
+
     private AirportState airportState;
-    private Plane currentPlane;
+    private Plane        currentPlane;
 
     public AirportEvent(AirportState state, Plane plane)
     {
@@ -23,5 +23,5 @@ public class AirportEvent
     {
         return currentPlane;
     }
-    
+
 }

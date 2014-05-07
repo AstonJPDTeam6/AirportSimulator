@@ -9,26 +9,30 @@ public abstract class AirTrafficController
 {
 
     protected Airport airport;
-    
-    public AirTrafficController() {}
-    
+
+    public AirTrafficController()
+    {
+    }
+
     public AirTrafficController(Airport airport)
     {
         this.airport = airport;
     }
 
     public abstract boolean getTakeoffOrLanding();
+
     public abstract Plane getNextTakingOff();
+
     public abstract Plane getNextLanding();
-    
+
     public AirportEvent getNextEvent()
     {
         Plane currentPlane;
         AirportState airportState;
-        
+
         boolean nextTakeOff = getTakeoffOrLanding();
-        
-        if(nextTakeOff)
+
+        if (nextTakeOff)
         {
             currentPlane = getNextTakingOff();
             airportState = AirportState.TAKEOFF;
@@ -38,17 +42,17 @@ public abstract class AirTrafficController
             currentPlane = getNextLanding();
             airportState = AirportState.LANDING;
         }
-        
-        if(currentPlane == null)
+
+        if (currentPlane == null)
         {
             airportState = AirportState.WAITING;
         }
-        
+
         AirportEvent ae = new AirportEvent(airportState, currentPlane);
-        
+
         return ae;
     }
-    
+
     public void setAirport(Airport airport)
     {
         this.airport = airport;

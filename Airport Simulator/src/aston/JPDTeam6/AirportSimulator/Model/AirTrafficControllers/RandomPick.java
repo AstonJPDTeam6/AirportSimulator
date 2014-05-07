@@ -9,9 +9,11 @@ import aston.JPDTeam6.AirportSimulator.Model.Planes.Plane;
 public class RandomPick extends AirTrafficController
 {
     private Random rng;
-    
-    public RandomPick() {}
-    
+
+    public RandomPick()
+    {
+    }
+
     public RandomPick(Airport airport)
     {
         super(airport);
@@ -20,7 +22,7 @@ public class RandomPick extends AirTrafficController
 
     private Random getRNG()
     {
-        if(rng != null)
+        if (rng != null)
         {
             return rng;
         }
@@ -30,7 +32,7 @@ public class RandomPick extends AirTrafficController
             return rng;
         }
     }
-    
+
     @Override
     public boolean getTakeoffOrLanding()
     {
@@ -39,15 +41,15 @@ public class RandomPick extends AirTrafficController
 
     private Plane pickRandom(List<Plane> planes)
     {
-        if(planes.size() == 0)
+        if (planes.size() == 0)
         {
             return null;
         }
-        
+
         int randK = getRNG().nextInt(planes.size());
         return planes.get(randK);
     }
-    
+
     @Override
     public Plane getNextTakingOff()
     {

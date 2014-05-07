@@ -21,18 +21,21 @@ public class CLIFrontend
     private static HashMap<String, Class<? extends View>>                 validViews = new HashMap<String, Class<? extends View>>();
     private static HashMap<String, Class<? extends AirTrafficController>> validATC   = new HashMap<String, Class<? extends AirTrafficController>>();
 
-    static {
-        validViews.put("text",  AirportSimulatorTextView.class);
+    static
+    {
+        validViews.put("text", AirportSimulatorTextView.class);
         validViews.put("graph", AirportSimulatorGraph.class);
         validViews.put("table", AirportSimulatorTable.class);
         validViews.put("plaincounter", AirportSimulatorParseableCounter.class);
 
-        validATC.put("fifo",   FIFO.class);
+        validATC.put("fifo", FIFO.class);
         validATC.put("random", RandomPick.class);
-        validATC.put("stf",    ShortestTimeFirst.class);
+        validATC.put("stf", ShortestTimeFirst.class);
     }
-    
-    private CLIFrontend() {}
+
+    private CLIFrontend()
+    {
+    }
 
     private static class CLIFrontendParameters
     {
@@ -53,9 +56,9 @@ public class CLIFrontend
 
         @Parameter(names = { "-c", "--air-trafic-controller" }, description = "Options: fifo, random, stf. Default: fifo")
         private String       airTrafficController  = "fifo";
-        
+
         @Parameter(names = { "--gui" }, description = "Starts with a GUI, ignores command line parameters")
-        private Boolean      enableGUI = false;
+        private Boolean      enableGUI             = false;
     }
 
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
@@ -64,16 +67,16 @@ public class CLIFrontend
         AirTrafficController atc;
         ArrayList<View> enabledViews = new ArrayList<View>();
         CLIFrontendParameters cfp = new CLIFrontendParameters();
-        
+
         new JCommander(cfp, args);
 
-        if(cfp.enableGUI)
+        if (cfp.enableGUI)
         {
             GUIFrontend.main(args);
-//            System.exit(0);
+            // System.exit(0);
             return;
         }
-        
+
         for (String viewType : cfp.views)
         {
             if (validViews.containsKey(viewType))

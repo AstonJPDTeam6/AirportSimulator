@@ -24,8 +24,8 @@ import aston.JPDTeam6.SimulatorLibrary.View.GUIview;
 public class AirportSimulatorTable extends GUIview
 {
 
-    private final int      blankSpace = 6;
-    private JTable table;
+    private final int blankSpace = 6;
+    private JTable    table;
 
     public AirportSimulatorTable()
     {

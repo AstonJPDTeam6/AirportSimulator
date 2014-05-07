@@ -5,8 +5,8 @@ import aston.JPDTeam6.AirportSimulator.AirportSimulator;
 public class Light extends Plane
 {
 
-    private static long lightID = 0;
-    
+    private static long        lightID           = 0;
+
     private static final long  TAKEOFF_TICKS     = 4;
     private static final long  LANDING_TICKS     = 6;
     private static final long  MIN_FLYING_TIME   = 20;
@@ -33,7 +33,7 @@ public class Light extends Plane
         if (towedGlider != null)
         {
             getSimulator().getCounter().incr("light landing after glider takeoff");
-            
+
             setIntent(PlaneIntent.LANDING);
             towedGlider = null;
         }

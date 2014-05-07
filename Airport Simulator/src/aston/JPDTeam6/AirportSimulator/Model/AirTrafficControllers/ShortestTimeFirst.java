@@ -9,8 +9,10 @@ public class ShortestTimeFirst extends AirTrafficController
 {
     private boolean lastTakeoffOrLand = false;
 
-    public ShortestTimeFirst() {}
-    
+    public ShortestTimeFirst()
+    {
+    }
+
     public ShortestTimeFirst(Airport airport)
     {
         super(airport);
@@ -20,15 +22,16 @@ public class ShortestTimeFirst extends AirTrafficController
     public boolean getTakeoffOrLanding()
     {
         boolean planesTakingOff = airport.getPlanesTakingOff().size() > 0;
-        boolean planesLanding   = airport.getPlanesLanding().size() > 0;
-        
-        if(planesTakingOff && planesLanding) {
+        boolean planesLanding = airport.getPlanesLanding().size() > 0;
+
+        if (planesTakingOff && planesLanding)
+        {
             lastTakeoffOrLand = !lastTakeoffOrLand;
             return lastTakeoffOrLand;
         }
         else
         {
-            if(planesTakingOff)
+            if (planesTakingOff)
                 return true;
             else
                 return false;
@@ -38,18 +41,18 @@ public class ShortestTimeFirst extends AirTrafficController
     private Plane getLeastFuelled(List<Plane> planes)
     {
         Plane leastFuelledPlane = null;
-        
-        for(Plane plane : planes)
+
+        for (Plane plane : planes)
         {
-            if((leastFuelledPlane == null || (plane.getFlyingTimeLeft() < leastFuelledPlane.getFlyingTimeLeft())) && plane.canStart() && plane.isWaiting())
+            if ((leastFuelledPlane == null || (plane.getFlyingTimeLeft() < leastFuelledPlane.getFlyingTimeLeft())) && plane.canStart() && plane.isWaiting())
             {
                 leastFuelledPlane = plane;
             }
         }
-        
+
         return leastFuelledPlane;
     }
-    
+
     @Override
     public Plane getNextTakingOff()
     {

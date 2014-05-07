@@ -10,7 +10,7 @@ public class Counter extends LinkedHashMap<String, Long>
     public Counter()
     {
         super();
-        
+
         this.clear();
     }
 
@@ -35,7 +35,7 @@ public class Counter extends LinkedHashMap<String, Long>
     public long get(String key)
     {
         Long temp = super.get(key);
-        if(temp == null)
+        if (temp == null)
         {
             return 0l;
         }
@@ -46,42 +46,3 @@ public class Counter extends LinkedHashMap<String, Long>
     }
 
 }
-
-// public class Counter {
-//
-// public HashMap <String, Long > counts = new HashMap <String, Long>() ;
-//
-// public Counter() {}
-//
-// public void incrCount(String key){
-// incrCount(key, 1);
-// }
-// public void incrCount(String key, long value)
-// {
-// long temp = counts.get(key);
-// temp += value;
-//
-// counts.put(key, temp);
-// }
-//
-// public void setCount(String key, long value)
-// {
-// counts.put(key, value);
-// }
-//
-// public long getCount(String key)
-// {
-// return counts.get(key);
-// }
-//
-// @SuppressWarnings("unchecked")
-// public HashMap <String, Long > getAllCount()
-// {
-// return (HashMap<String, Long>) counts.clone();
-// }
-//
-// public void reset()
-// {
-// counts.clear();
-// }
-// }
